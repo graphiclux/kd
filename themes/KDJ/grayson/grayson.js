@@ -393,7 +393,7 @@ $(document).ready(function() {
 
 	$('#shipping_continue').unbind().click(function() {
 
-    if (($('#shipping_first_name').val() != "") && ($('#shipping_last_name').val() != "") && ($('#shipping_address_1').val() != "") && ($('#shipping_city').val() != "") && ($('#shipping_state').val() != "") && ($('#shipping_postcode').val() != "") && ($('#shipping_country').val() != "")) {
+    if ( confirmShipping() ) {
 
       hideShipping();
       showPayment();
@@ -545,10 +545,144 @@ $(document).ready(function() {
 	}
 
 
+    /* cmRD Scripts */
+        setTimeout( callScripts, 1000 );
+
+        function callScripts() {
+            console.log("cmrd");
+            // var checkoutBtn = $(".button.alt.wc-forward.the_button.checkout_btn");
+            var trigger = $("#billing_continue");
+
+            typeof(trigger) !== 'undefined' ? $(trigger).on("click", function() { shippingScript() } ) : '';
+
+            // typeof(checkoutBtn) !== 'undefined' ? addNote( checkoutBtn, "Shipping + taxes applied at checkout." ) : '';
+
+            $(".mcs-items-container").length ? setAutoScroll( $(".mcs-items-container") ) : '';
+            $(".MagicToolboxSelectorsContainer").length ? setAutoScroll( $(".MagicToolboxSelectorsContainer") ) : '';
+
+            $(".remove-coupon").click(function() {
+                var code = $(this).data("code");
+                $.ajax({
+                    method: "post",
+                    data: {
+                        action: 'cmrd_remove_coupon',
+                        code: code
+                    },
+                    url: ajax_url,
+                    complete: location.reload()
+                });
+            });
+        }
+
+        // function addNote( el, text, small = true) {
+        //     var node = small? "small" : "<p>";
+        //     var note = document.createElement( node );
+        //     note.textContent = text;
+
+        //     $(note).hide();
+
+        //     $(el).after(note);
+
+        //     $(note).fadeIn("slow");
+        // }
+
+        function shippingScript() {
+            var select = $("#shipping_country")[0];
+            var shipping = $("#shipping_option_select select")[0];
+
+            //international shipping option
+            var world = $(shipping).children("option[value='woocommerce_flatrate_percountry']")[0];
+
+            // domestic shipping options
+            var shipOpts = $(shipping).children("option:not([value='woocommerce_flatrate_percountry'])");
+            shipOpts = $.makeArray(shipOpts);
+
+            function showDomestics() {
+                $(shipOpts).show();
+            }
+
+            function hideDomestics() {
+                var _select = $("#shipping_country")[0];
+                $(shipOpts).hide();
+                var selected = $(_select).children("option:selected")[0];
+
+                if ( $.inArray(selected, shipOpts) ) {
+                    $(selected).removeAttr("selected");
+                    $(world).attr("selected", "selected");
+                }
+            }
 
 
+            $(select).on("change", function() {
+                var selected = $(this).children("option:selected");
 
+                $(selected).val() === 'US' ? showDomestics() : hideDomestics();
+            });
+        }
 
+    function setAutoScroll( target ) {
+        if ( typeof(target) == 'undefined') {
+            return;
+        }
+
+        var scrolling;
+
+        $(target).on("mouseenter", function() {
+            var scrolled = 0;
+            var maxHeight = parseInt( $(target).css("height") );
+
+            scrolling = setInterval(function() {
+                var property = $(target).css("transform");
+                var startIdx = property.lastIndexOf(",") + 1;
+                var stopIdx = property.lastIndexOf(")");
+
+                var scrollTop = parseInt( property.slice( startIdx, stopIdx ) );
+
+                scrollTop -= 3;
+                scrolled += 3;
+
+                var newProp = "matrix(1, 0, 0, 1, 0, " + scrollTop + ")";
+
+                $(target).css("transform", newProp);
+
+                if ( scrolled > maxHeight ) {
+                    clearInterval(scrolling);
+                }
+
+            }, 30);
+        });
+
+        $(target).on("mouseleave", function() {
+            clearInterval( scrolling );
+            var matrix = "matrix(1, 0, 0, 1, 0, 0)";
+            var props = {
+                "webkitTransform": matrix,
+                "MozTransform": matrix,
+                "msTransform": matrix,
+                "OTransform": matrix,
+                "transform": matrix
+            };
+            $(target).css(props);
+        });
+    }
+
+    function scrollOnHover(el) {
+        window['scroller'] = setInterval( function() { scrollIt(el) }, 30 );
+    };
+
+    function scrollIt(el) {
+        var property = $(el).css("transform");
+        var startIdx = property.lastIndexOf(",") + 1;
+        var stopIdx = property.lastIndexOf(")");
+
+        var scrollTop = parseInt( property.slice( startIdx, stopIdx ) );
+
+        scrollTop -= 3;
+
+        var newProp = "matrix(1, 0, 0, 1, 0, " + scrollTop + ")";
+
+        $(el).css("transform", newProp);
+    }
 });
 
 function clean_up_cart_variations() {
@@ -705,3 +839,25 @@ function product_swipe(swipe, elementClass, count) {
 	}
 
 }
+
+function confirmShipping() {
+    var first = $('#shipping_first_name').val(),
+    last = $('#shipping_last_name').val(),
+    address = $('#shipping_address_1').val(),
+    city = $('#shipping_city').val(),
+    state = $('#shipping_state').val(),
+    postcode = $('#shipping_postcode').val(),
+    country = $('#shipping_country').val();
+
+
+    if ( first && last && address && city ) {
+        if ( country == 'US' ) {
+            return state && postcode
+        } else {
+            return country;
+        }
+    } else {
+        return false;
+    }
+}
+
