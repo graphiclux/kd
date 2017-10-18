@@ -1,8 +1,8 @@
 <?php
 global $am_option;
 
-if( isset( $_GET['showall'] ) ){ 
-    add_filter( 'loop_shop_per_page', create_function( '$cols', 'return -1;' ) ); 
+if( isset( $_GET['showall'] ) ){
+    add_filter( 'loop_shop_per_page', create_function( '$cols', 'return -1;' ) );
 } else {
     add_filter( 'loop_shop_per_page', create_function( '$cols', 'return '.get_option('posts_per_page').';' ) );
 }
@@ -62,25 +62,26 @@ function custom_styles() {
 
 
 	wp_enqueue_script('plugins');
-	
+
 	$data = array(
 		'coupon_nonce' => wp_create_nonce('apply-coupon'),
 		'update_order_nonce' => wp_create_nonce('update-order-review')
 	);
-	  
+
 	wp_localize_script('grayson', 'localized_config', $data);
 	wp_enqueue_script( 'grayson');
 
+
   wp_enqueue_script('grayson-payment');
-	
+
 	if (is_woocommerce()) {
-	  
+
 		if (is_category() || is_single() || is_archive()) {
 			wp_enqueue_script('jquery-mobile');
 			wp_enqueue_script('sumner-js');
 
 		}
-	
+
 	}
 //  wp_enqueue_style( 'jquery-mobile' );
 
@@ -88,16 +89,12 @@ function custom_styles() {
 	wp_enqueue_style( 'sumner' );
 
 
-	
+
  	wp_enqueue_script( 'app', get_stylesheet_directory_uri() . '/includes/js/app.js', false, '', true);
 
 
 }
 add_action( 'wp_enqueue_scripts', 'custom_styles' );
-
-
-
-
 
 
 function custom_track_product_view() {
@@ -127,78 +124,66 @@ function custom_track_product_view() {
 add_action( 'template_redirect', 'custom_track_product_view', 20 );
 
 
-
-
-
-
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// WOOCOMMERCE CUSTOM HOOKS ////////////////////////////////////////////////
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CUSTOM PHONE FIELD & CHANGE PLACEHOLDERS
 add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );
 
 // Our hooked in function - $fields is passed via the filter!
 function custom_override_checkout_fields( $fields ) {
-     
+
      unset($fields['billing']);
      unset($fields['shipping']['shipping_country']);
-     
+
      $fields['billing']['billing_first_name'] = array(
 	    'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
 	    'priority'		=> 10
      );
-     
+
      $fields['billing']['billing_last_name'] = array(
 	    'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
 	    'priority'		=> 20
      );
-     
+
      $fields['billing']['billing_email'] = array(
 	    'placeholder'   => _x('Email', 'placeholder', 'woocommerce'),
 	    'priority'		=> 30
      );
-     
+
      $fields['billing']['billing_address_1'] = array(
 	    'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
 	    'priority'		=> 40
      );
-     
+
      $fields['billing']['billing_address_2'] = array(
 	    'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
 	    'priority'		=> 50
      );
-     
+
      $fields['billing']['billing_country'] = array(
 	    'type'			=> 'country',
 	    'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
 	    'priority'		=> 60
      );
-     
+
      $fields['billing']['billing_city'] = array(
 	    'type'			=> 'text',
 	    'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
 	    'priority'		=> 70
      );
-     
+
      $fields['billing']['billing_state'] = array(
 	    'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
 	    'type'   => 'state',
 	    'priority'		=> 80
      );
-     
+
      $fields['billing']['billing_postcode'] = array(
 	    'type'			=> 'text',
 	    'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
 	    'priority'		=> 90
      );
-     
+
      $fields['billing']['billing_phone'] = array(
 	    'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
 	    'required'  => false,
@@ -206,49 +191,49 @@ function custom_override_checkout_fields( $fields ) {
 	    'clear'     => true,
 	    'priority'	=> 95
      );
-     
-     
+
+
      $fields['shipping']['shipping_first_name'] = array(
 	    'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
 	    'priority' 		=> 10
      );
-     
+
      $fields['shipping']['shipping_last_name'] = array(
 	    'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
 	    'priority' 		=> 20
      );
-     
+
      $fields['shipping']['shipping_address_1'] = array(
 	    'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
 	    'priority' 		=> 30
      );
-     
+
      $fields['shipping']['shipping_address_2'] = array(
 	    'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
 	    'priority' 		=> 40
      );
-     
+
      $fields['shipping']['shipping_country'] = array(
 	     'type'			=> 'country',
 	    'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
 	    'priority' 		=> 60
      );
-     
+
      $fields['shipping']['shipping_postcode'] = array(
 	    'type'			=> 'text',
 	    'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
      );
-     
+
      $fields['shipping']['shipping_city'] = array(
 	    'type'			=> 'text',
 	    'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
      );
-     
+
      $fields['shipping']['shipping_state'] = array(
 	    'type'			=> 'state',
 	    'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
      );
-     
+
      $fields['shipping']['shipping_phone'] = array(
 	    'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
 	    'required'  => false,
@@ -256,8 +241,8 @@ function custom_override_checkout_fields( $fields ) {
 	    'clear'     => true,
 	    'priority'	=> 90
      );
-     
-     unset($fields['order']['order_comments']); 
+
+     unset($fields['order']['order_comments']);
 
      return $fields;
 }
@@ -266,8 +251,6 @@ function custom_override_checkout_fields( $fields ) {
 remove_action('woocommerce_checkout_billing','woocommerce_checkout_billing');
 add_action('woocommerce_billing_info','woocommerce_checkout_billing');
 */
-
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  SHIPPING OPTION
@@ -343,14 +326,9 @@ function add_shipping_header() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CHECKOUT - COUPON CODE
 //remove_action( 'woocommerce_after_checkout_form', 'woocommerce_checkout_coupon_form', 5 );
+
 remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
 add_action( 'woocommerce_before_checkout_coupon', 'woocommerce_checkout_coupon_form', 5 );
-
-// rename the "Have a Coupon?" message on the checkout page
-//function woocommerce_rename_coupon_message_on_checkout() {
-//// 	return 'Discount Code';
-//}
-//add_filter( 'woocommerce_checkout_coupon_message', 'woocommerce_rename_coupon_message_on_checkout', 20 );
 
 // rename the coupon field on the checkout page
 function woocommerce_rename_coupon_field_on_checkout( $translated_text, $text, $text_domain ) {
@@ -360,7 +338,7 @@ function woocommerce_rename_coupon_field_on_checkout( $translated_text, $text, $
 	}
 	if ( 'Coupon code' === $text ) {
 		$translated_text = 'Enter Code';
-	
+
 	} elseif ( 'Apply Coupon' === $text ) {
 		$translated_text = 'APPLY';
 	}
@@ -369,42 +347,42 @@ function woocommerce_rename_coupon_field_on_checkout( $translated_text, $text, $
 add_filter( 'gettext', 'woocommerce_rename_coupon_field_on_checkout', 10, 3 );
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// PAYMENT
 remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
 add_action( 'woocommerce_checkout_before_order_review', 'woocommerce_checkout_payment' );
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// REVIEW
 add_action( 'woocommerce_checkout_before_order_review', 'review_and_purchase' );
 function review_and_purchase() {
 	echo '<div class="review_and_purchase">';
-	
 		echo '<h3>';
 			_e( '4. Review & Purchase', 'woocommerce' );
 		echo '</h3>';
-		
+
 		echo '<span class="review_and_purchase_instructions">';
 			echo "Click the purchase button below after you have reviewed your information.";
 		echo '</span>';
-		
+
 		echo apply_filters( 'woocommerce_order_button_html', '<input type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="PURCHASE" data-value="PURCHASE" />' );
-		
 	echo '</div>';
 }
 
+/* create buton for removing coupons */
+function cmrd_remove_coupon( ) {
+    WC()->cart->remove_coupons();
+    wp_die();
+}
 
+add_action('wp_ajax_cmrd_remove_coupon', 'cmrd_remove_coupon');
+add_action('wp_ajax_nopriv_cmrd_remove_coupon', 'cmrd_remove_coupon');
 
-
-// define the woocommerce_thankyou_order_received_text callback 
-function filter_woocommerce_thankyou_order_received_text( $var, $order ) { 
+// define the woocommerce_thankyou_order_received_text callback
+function filter_woocommerce_thankyou_order_received_text( $var, $order ) {
     $var = '<h3>Your Order Has Been Placed!</h3>';
-    return $var; 
-}; 
-         
-// add the filter 
-add_filter( 'woocommerce_thankyou_order_received_text', 'filter_woocommerce_thankyou_order_received_text', 10, 2 ); 
+    return $var;
+};
+
+
+// add the filter
+add_filter( 'woocommerce_thankyou_order_received_text', 'filter_woocommerce_thankyou_order_received_text', 10, 2 );
