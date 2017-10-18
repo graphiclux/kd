@@ -103,7 +103,7 @@ html {
 body::-webkit-scrollbar {
     width: 1em;
 }
- 
+
 body::-webkit-scrollbar-thumb {
   background-color: #fae4e1;
   outline: 1px solid slategrey;
@@ -195,7 +195,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .check_prod_photo_cell {
-	
+
 }
 
 /*
@@ -210,7 +210,7 @@ body::-webkit-scrollbar-thumb {
     width: 100%;
     display: block;
     font-size: 14px;
-    
+
 }
 
 .size_numbers {
@@ -334,7 +334,7 @@ body::-webkit-scrollbar-thumb {
     margin: 0px !important;
 }
 
-.cart_right { 
+.cart_right {
 	float: left;
 	width: 50%;
 }
@@ -352,13 +352,17 @@ body::-webkit-scrollbar-thumb {
 
 .coupon {
 	display: block;
-	height: 45px;
+    min-height: 90px;
     /*overflow: hidden;*/
 }
 
 .coupon p {
 	margin: 0px;
 	display: block;
+}
+
+.coupon p input + br {
+    display: none;
 }
 
 .cart_discount_code label {
@@ -831,10 +835,10 @@ input::-webkit-inner-spin-button {
 }
 
 .checkout_edit {
-	float: right; 
-	color: #555; 
-	font-family: Arial, Helvetica, sans-serif; 
-	font-size: 14px; 
+	float: right;
+	color: #555;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
 	font-weight: 100;
 	display:none;
 	margin-top: 10px;
@@ -1220,7 +1224,7 @@ input[type=number], select, input[type=tel], input[type=url], input[type=passwor
 .product_question textarea {
 	height: 153px !important;
 }
-    
+
 .product_question input[type=submit] {
 	height: 45px !important;
 }
@@ -1280,13 +1284,13 @@ div.MagicToolboxMainContainer {
 }
 
 @media screen and (min-width: 768px) {
-	
+
 	.recently_viewed, .youll_love_these {
 		width: 50%;
 		float:left;
 		display:block !important;
 	}
-	
+
 	.rc_wc_rvp_product_list_widget li, .product_list_widget li {
 		float: left;
 		width: 33.33%;
@@ -1295,5 +1299,5 @@ div.MagicToolboxMainContainer {
 	.cart_discount_code .coupon .woocommerce-info:first-of-type {
 		display: block;
 	}
-	
+
 }
