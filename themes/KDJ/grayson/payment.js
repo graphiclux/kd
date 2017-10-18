@@ -38,6 +38,21 @@ function initialize() {
 
 	}
 
+  if ( $(".remove-coupon").length ) {
+      $(".remove-coupon").click(function() {
+          var code = $(this).data("code");
+          $.ajax({
+              method: "post",
+              data: {
+                  action: 'cmrd_remove_coupon',
+                  code: code
+              },
+              url: ajax_url,
+              complete: location.reload()
+          });
+      });
+  }
+
 
   if ($('#billing_header .express_checkout_button_chekout_page').length === 0) {
     var paypalElement = $('.express_checkout_button_chekout_page');
@@ -121,7 +136,13 @@ function initialize() {
         var paymentReviewFieldsLeft = billingName + billingAddress1 + billingAddress2 + billingCityStateAndZip + billingCountry;
       }
 
-      var billingCardNumber = '<p>' + $('#stripe-card-number').val() + '</p>';
+
+      var cc_num = $('#stripe-card-number').val();
+      var cc_len = cc_num.length;
+      var hider = '*';
+      var _numField = hider.repeat(cc_len - 4) + cc_num.slice(-4);
+      var billingCardNumber = '<p>' + _numField + '</p>';
+
 
       if (typeof document.getElementById('stripe-card-number').className.split(/\s+/)[3] != 'undefined') {
 
@@ -213,9 +234,32 @@ function apply_coupon(element) {
 
   var coupon = $('#coupon_code').val();
 
-
-
   $.post('?wc-ajax=apply_coupon', {security: localized_config.coupon_nonce,coupon_code : coupon}).done(function(data) {
+
+    if ( data.indexOf( 'success' ) ) {
+        var removeBtn = document.createElement("button");
+        removeBtn.className = "remove-button";
+        $(removeBtn).attr({
+            "data-code": coupon,
+            "class": "remove-button"
+        });
+
+        $(removeBtn).on("click", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+                $.ajax({
+                    method: "post",
+                    data: {
+                        action: 'cmrd_remove_coupon',
+                        code: code
+                    },
+                    url: ajax_url,
+                    complete: location.reload()
+                });
+        });
+
+        $(".coupon form form-row-last").after(removeBtn);
+    }
 
     $('.woocommerce-message').fadeOut();
     $('.woocommerce-error').fadeOut();
