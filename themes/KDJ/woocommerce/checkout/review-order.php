@@ -155,16 +155,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	                else
 	                    echo apply_filters('woocommerce_cart_item_name', sprintf('<a href="%s">%s</a>', $_product->get_permalink(), $_product->get_title()), $cart_item, $cart_item_key);
 
-					$product_color = ($cart_item['variation']['attribute_pa_color']) ? strtoupper($cart_item['variation']['attribute_pa_color']) : false;
-					$product_size = ($cart_item['variation']['attribute_pa_size']) ? explode('size-', $cart_item['variation']['attribute_pa_size'])[1] : false;
+					// $product_color = ($cart_item['variation']['attribute_pa_color']) ? strtoupper($cart_item['variation']['attribute_pa_color']) : false;
+					// $product_size = ($cart_item['variation']['attribute_pa_size']) ? explode('size-', $cart_item['variation']['attribute_pa_size'])[1] : false;
 
 					if (strlen($product_size) > 1) {
 						$firstSizeNumber = substr($product_size, 0, 1);
 						$product_size = substr_replace($product_size, $firstSizeNumber . "/", 0, 1);
 					}
 
-					$product_color = ($product_color) ? "COLOR : " . $product_color : '';
-					$product_size = ($product_size) ? "<span class='size_txt'>SIZE</span> <span class='size_numbers'>" . $product_size . "</span>": '';
+					// $product_color = ($product_color) ? "COLOR : " . $product_color : '';
+					// $product_size = ($product_size) ? "<span class='size_txt'>SIZE</span> <span class='size_numbers'>" . $product_size . "</span>": '';
 
 
 
@@ -178,17 +178,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	            echo '<p class="backorder_notification">' . __('Available on backorder', 'woocommerce') . '</p>';
 	                ?></h3>
 	                <ul>
-	                    <?php echo WC()->cart->get_item_data($cart_item); ?>
+	                	<?php $variations = $cart_item['variation']; ?>
+	                	<?php if ( count($variations) ) : ?>
+		                    <?php foreach ($variations as $key => $value) {
+		                        $idx = strrpos($key, 'pa_') + 3;
+		                        $key = strtoupper( substr($key, $idx) );
+
+		                        $value = strtoupper( str_replace( '-', ' ', $value) );
+		                    }
+		                    ?>
+		                    <li><b><?= $key ?></b> : <?= $value ?></li>
+		                    <li><b>Qty:</b> <?= $cart_item['quantity']; ?>
+	                    <?php endif ?>
 	                    <li>$<?php echo $_product->get_price(); ?></li>
 	                </ul>
-	                <?=($product_color) ? '<span class="cart_product_color">'.$product_color.'</span>' : '';?>
 	                    <?
 	                echo apply_filters('woocommerce_cart_item_remove_link', sprintf('<a href="%s" class="checkout_delete_link" title="%s">REMOVE</a>', esc_url(WC()->cart->get_remove_url($cart_item_key)), __('Remove this item', 'woocommerce')), $cart_item_key);
 	                ?>
-	            </li>
-	            <li class="check_prod_style_cell">
-	            	<?=($product_size) ? '<span class="cart_product_size">'.$product_size.'</span>' : '';?>
-	            	<span class="qty_txt">QTY</span><span class="checkout_product_qty"><?=$cart_item['quantity']?></span>
 	            </li>
 			</ul>
 			<?php
