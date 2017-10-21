@@ -337,45 +337,48 @@ $(document).ready(function() {
         var billing_errors = validateForm( billing_form );;
 
     if ( billing_errors.length === 0 ) {
-            hideBilling();
-            showShipping();
+        hideBilling();
+        showShipping();
 
-            // ADD EDIT BUTTON
-            $('#billing_edit').fadeIn();
+        // ADD EDIT BUTTON
+        $('#billing_edit').fadeIn();
 
-            // ADD FIELD REVIEW AREA
-            var billingFirstName = '<p>' + $('#billing_first_name').val() + '</p>';
-            var billingEmail = '<p>' + $('#billing_email').val() + '</p>';
+        // ADD FIELD REVIEW AREA
+        var billingFirstName = '<p>' + $('#billing_first_name').val() + '</p>';
+        var billingEmail = '<p>' + $('#billing_email').val() + '</p>';
 
-            var billingFieldReviewWrapper = $('#billing_field_review');
+        var billingFieldReviewWrapper = $('#billing_field_review');
 
-            $(billingFirstName).appendTo(billingFieldReviewWrapper);
-            $(billingEmail).appendTo(billingFieldReviewWrapper);
-            $('#billing_field_review').fadeIn();
+        $(billingFirstName).appendTo(billingFieldReviewWrapper);
+        $(billingEmail).appendTo(billingFieldReviewWrapper);
+        $('#billing_field_review').fadeIn();
 
 
-      $('html,body').animate({
+        $('html,body').animate({
             scrollTop: $("#customer_details .col-1").offset().top - 50},
           'slow');
     } else {
 
-      $(billing_errors).each(function(idx, field) {
+        var warning = $(".woocommerce-billing-fields .cmrd-warning");
+
+        $(warning).css("visibility", "visible");
+
+        $(".continue").on("click", function(e) {
+            $(warning).css("visibility", "hidden");
+            $(".continue").off(e);
+        });
+
+        $(billing_errors).each(function(idx, field) {
           outlineRed(field);
 
-      });
+        });
 
-      $('html,body').animate({
+        $('html,body').animate({
             scrollTop: $(".woocommerce-billing-fields").offset().top - 50},
           'slow');
-
         }
 
-
-
     });
-
-
-
 
 
     $('#shipping_continue').unbind().click(function() {
@@ -383,55 +386,58 @@ $(document).ready(function() {
 
     if ( shipping_errors.length === 0 ) {
 
-      hideShipping();
-      showPayment();
+        hideShipping();
+        showPayment();
 
-      $('html,body').animate({
+        $('html,body').animate({
             scrollTop: $("#payment").offset().top},
           'slow');
 
-      // ADD EDIT BUTTON
-      $('#shipping_edit').fadeIn();
+        // ADD EDIT BUTTON
+        $('#shipping_edit').fadeIn();
 
-      $('#customer_details .col-2').css({'height': 'auto'});
+        $('#customer_details .col-2').css({'height': 'auto'});
 
-      var shippingFieldReviewWrapper = $('#shipping_field_review');
+        var shippingFieldReviewWrapper = $('#shipping_field_review');
 
-      // ADD FIELD REVIEW AREA
-      var shippingName = '<p>' + $('#shipping_first_name').val() + ' ' + $('#shipping_last_name').val() + '</p>';
-      var shippingAddress1 = '<p>' + $('#shipping_address_1').val() + '</p>';
-      var shippingAddress2 = '<p>' + $('#shipping_address_2').val() + '</p>';
-      var shippingCityStateAndZip = '<p>' + $('#shipping_city').val() + ', ' + $('#shipping_state').val() + ' ' + $('#shipping_postcode').val() + '</p>';
-      var shippingCountry = '<p>' + $('#shipping_country').val() + '</p>';
+        // ADD FIELD REVIEW AREA
+        var shippingName = '<p>' + $('#shipping_first_name').val() + ' ' + $('#shipping_last_name').val() + '</p>';
+        var shippingAddress1 = '<p>' + $('#shipping_address_1').val() + '</p>';
+        var shippingAddress2 = '<p>' + $('#shipping_address_2').val() + '</p>';
+        var shippingCityStateAndZip = '<p>' + $('#shipping_city').val() + ', ' + $('#shipping_state').val() + ' ' + $('#shipping_postcode').val() + '</p>';
+        var shippingCountry = '<p>' + $('#shipping_country').val() + '</p>';
 
-      var shippingOption = '<br><br><p>' + $('#shipping_method_0 option:selected' ).text() + '</p>';
+        var shippingOption = '<br><br><p>' + $('#shipping_method_0 option:selected' ).text() + '</p>';
 
-      if (shippingAddress2 == '<p></p>') {
-        var shippingReviewFields = shippingName + shippingAddress1 + shippingCityStateAndZip + shippingCountry + shippingOption;
-      } else {
-        var shippingReviewFields = shippingName + shippingAddress1 + shippingAddress2 + shippingCityStateAndZip + shippingCountry + shippingOption;
-      }
+        if (shippingAddress2 == '<p></p>') {
+            var shippingReviewFields = shippingName + shippingAddress1 + shippingCityStateAndZip + shippingCountry + shippingOption;
+        } else {
+            var shippingReviewFields = shippingName + shippingAddress1 + shippingAddress2 + shippingCityStateAndZip + shippingCountry + shippingOption;
+        }
 
-      $(shippingReviewFields).appendTo(shippingFieldReviewWrapper);
-      $('#shipping_field_review').fadeIn();
+        $(shippingReviewFields).appendTo(shippingFieldReviewWrapper);
+        $('#shipping_field_review').fadeIn();
 
     } else {
 
-      $(shipping_errors).each(function(idx, field) {
-          outlineRed(field);
-      });
+        var warning = $(".woocommerce-shipping-fields .cmrd-warning");
+        $(warning).css("visibility", "visible");
 
-      $('html,body').animate({
+        $(".continue").on("click", function(e) {
+            $(warning).css("visibility", "hidden");
+            $(".continue").off(e);
+        });
+
+        $(shipping_errors).each(function(idx, field) {
+          outlineRed(field);
+        });
+
+        $('html,body').animate({
             scrollTop: $(".woocommerce-shipping-fields").offset().top - 50},
           'slow');
-
         }
 
-
-
     });
-
-
 
     $('#place_order').unbind().click(function(e) {
 
@@ -681,14 +687,12 @@ function product_swipe(swipe, elementClass, count) {
 
 
     /* cmRD Scripts */
-    setTimeout( callScripts, 700 );
+    $(document).ready( function() {
+        setTimeout( callScripts, 700);
+    });
 
     function callScripts() {
         console.log("cmrd");
-
-        /* Set shipping script to force international when non United States is selected */
-        var trigger = $("#billing_continue");
-        typeof(trigger) !== 'undefined' ? $(trigger).on("click", function() { shippingScript() } ) : '';
 
         /* If it is a single product page, check page for loaded image gallery */
         if ( $("body.single-product").length ) {
@@ -699,14 +703,57 @@ function product_swipe(swipe, elementClass, count) {
                     clearInterval(checker);
 
                     var target = ".MagicToolboxSelectorsContainer div[id^=Magic]";
+
                     if ( !$(target).length ) {
                         target = ".mcs-items-container";
                     }
-                    setAutoScroll( trigger, target);
+                    setAutoScroll( trigger, target );
+
+                    /* Function not animating on firt trigger
+                           this emulates the first and second triggers, just to make sure
+                           it works as expected.
+                    */
+                        $( $(trigger).children()[0] ).mouseenter();
+                        $( $(trigger).children()[0] ).mouseleave();
+
+                        $( $(trigger).children()[0] ).mouseenter();
+                        $( $(trigger).children()[0] ).mouseleave();
                 }
             }, 200);
         }
 
+        /* Set shipping script to force international when non United States is selected */
+        if ( $("body.woocommerce-checkout").length ) {
+
+            // Woocommerce forces my element to be a child of <p>. This undoes that.
+            $(".cmrd-warning").unwrap();
+
+            var trigger = $("#billing_continue");
+
+            // Wait for the elements to finish loading before calling script
+            var checker = setInterval( function() {
+                if ( $(trigger).length ) {
+                    clearInterval(checker);
+
+                    window.countrySelect = $("#shipping_country");
+                    window.optSelect = $("select[id^='shipping_method']");
+
+                    var checker2 = setInterval(function() {
+                        if ( countrySelect.length && optSelect.length ) {
+                            clearInterval(checker2);
+                            shippingScript();
+                        }
+
+                        window.countrySelect = $("#shipping_country");
+                        window.optSelect = $("select[id^='shipping_method']");
+                    }, 200);
+                }
+
+            }, 200);
+        }
+
+
+       /* Ajax to add remove coupon functinoality to checkout and cart page */
         $(".remove-coupon").click(function() {
             var code = $(this).data("code");
             $.ajax({
@@ -720,7 +767,6 @@ function product_swipe(swipe, elementClass, count) {
             });
         });
     }
-
 
     /**
     * @descr If a field has any kind of value, it passes. Else it is pushed into errors.
@@ -763,36 +809,57 @@ function product_swipe(swipe, elementClass, count) {
     * @descr Forces international shipping option if the shipping country is not United States
     */
     function shippingScript() {
-        var select = $("#shipping_country")[0];
-        var shipping = $("#shipping_option_select select")[0];
 
         //international shipping option
-        var world = $(shipping).children("option[value='woocommerce_flatrate_percountry']")[0];
+        var world = $(optSelect).children("option[value='woocommerce_flatrate_percountry']");
 
         // domestic shipping options
-        var shipOpts = $(shipping).children("option:not([value='woocommerce_flatrate_percountry'])");
-        shipOpts = $.makeArray(shipOpts);
+        var domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
+        var wcInternational = $(optSelect).children("option[value='flat_rate:5']");
+
+        if ( wcInternational.length ) {
+            $(wcInternational).remove();
+        }
 
         function showDomestics() {
-            $(shipOpts).show();
+            $(domestics).show();
         }
 
         function hideDomestics() {
-            var _select = $("#shipping_country")[0];
-            $(shipOpts).hide();
-            var selected = $(_select).children("option:selected")[0];
+            $(domestics).hide();
+            var selected = $(optSelect).children(":selected");
 
-            if ( $.inArray(selected, shipOpts) ) {
+            if ( $(selected).is(domestics) ) {
                 $(selected).removeAttr("selected");
+                $(world).click();
+                $(optSelect).trigger("change");
                 $(world).attr("selected", "selected");
             }
         }
 
+        if ( domestics.length < 2 ) {
+            var opt = document.createElement("option");
+            var opt2 = document.createElement("option");
+            opt.value = "flat_rate:2";
+            $(opt).val("flat_rate:2").text("Domestic Shipping + Tracking (arrival time: 3-5 business days after shipped): $7.50");
+            $(opt2).val("flat_rate:4").text("Expedited 2 Day Shipping (Domestic Only): $25.00")
 
-        $(select).on("change", function() {
-            var selected = $(this).children("option:selected");
+            $("#shipping_method_0").append(opt, opt2);
 
-            $(selected).val() === 'US' ? showDomestics() : hideDomestics();
+            domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
+
+            hideDomestics();
+        }
+
+
+        $(countrySelect).on("change", function() {
+            if ( domestics.length ) {
+
+                var selected = $(this).children("option:selected");
+                $(selected).val() === 'US' ? showDomestics() : hideDomestics();
+
+            }
+
         });
     }
 
@@ -870,3 +937,22 @@ function product_swipe(swipe, elementClass, count) {
         };
         $(target).css(props);
     }
+
+    function saysWho() {
+        var ua= navigator.userAgent, tem,f
+        M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+        if(/trident/i.test(M[1])){
+            tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+            return 'IE '+(tem[1] || '');
+        }
+        if(M[1]=== 'Chrome'){
+            tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+            if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+        }
+        M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+        console.log(M);
+        console.log(tem);
+        // if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+        return M.join(' ');
+    }
+
