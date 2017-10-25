@@ -356,6 +356,21 @@ body::-webkit-scrollbar-thumb {
     /*overflow: hidden;*/
 }
 
+
+.cmrd-coupon {
+    clear: both;
+    display: block;
+}
+
+
+.cmrd-coupon-data * {
+    display: inline;
+}
+
+.product_slide {
+    position: relative;
+}
+
 .coupon p {
 	margin: 0px;
 	display: block;
@@ -434,6 +449,7 @@ body::-webkit-scrollbar-thumb {
 	position:relative;
 	z-index: 2;
 }
+
 
 .woocommerce-checkout .entry h3 {
 	font-size: 18px;
@@ -1300,4 +1316,14 @@ div.MagicToolboxMainContainer {
 		display: block;
 	}
 
+}
+
+/* Prevent autoscrolling images from being visible beyond parent */
+.mcs-items-container,
+.MagicToolboxSelectorsContainer {
+    overflow: hidden;
+}
+
+.cmrd-invalid {
+    border: 2px solid red !important;
 }
