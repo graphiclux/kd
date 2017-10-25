@@ -28,7 +28,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="coupon">
 				<div class="woocommerce-info">Discount Code</div>
 				<? do_action( 'woocommerce_before_checkout_coupon' ); ?>
-				<? foreach ( WC()->cart->get_coupons() as $code => $coupon ): ?>
+
+				<? $coupons = WC()->cart->get_coupons() ?>
+				<? if( count( $coupons ) ): ?>
+					<div class="cmrd-coupon-wrap">
+						<p>
+		                    <input type="submit" id="remove-coupons" value="Remove Coupons" class="button remove-coupon" />
+		                </p>
+	                </div>
+				<? endif ?>
+
+				<? foreach ( $coupons as $code => $coupon ): ?>
                 <?php
                     $type = '&nbsp;';
                     $_type = $coupon->get_discount_type();
@@ -44,9 +54,9 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <div class="cmrd-coupon-data">
                         <em><?= $code ?>:&nbsp;</em><strong><?= $type ?><?= $coupon->amount ?></strong>
                     </div>
-                    <input type="submit" value="Remove Coupons" class="button remove-coupon" data-code=" <?=$coupon->get_code()?> " />
                 </div>
             <? endforeach ?>
+
 			</div>
 		</div>
 	<? } ?>
@@ -158,16 +168,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					// $product_color = ($cart_item['variation']['attribute_pa_color']) ? strtoupper($cart_item['variation']['attribute_pa_color']) : false;
 					// $product_size = ($cart_item['variation']['attribute_pa_size']) ? explode('size-', $cart_item['variation']['attribute_pa_size'])[1] : false;
 
-					if (strlen($product_size) > 1) {
-						$firstSizeNumber = substr($product_size, 0, 1);
-						$product_size = substr_replace($product_size, $firstSizeNumber . "/", 0, 1);
-					}
+					// if (strlen($product_size) > 1) {
+					// 	$firstSizeNumber = substr($product_size, 0, 1);
+					// 	$product_size = substr_replace($product_size, $firstSizeNumber . "/", 0, 1);
+					// }
 
 					// $product_color = ($product_color) ? "COLOR : " . $product_color : '';
 					// $product_size = ($product_size) ? "<span class='size_txt'>SIZE</span> <span class='size_numbers'>" . $product_size . "</span>": '';
-
-
-
 
 
 	        // Meta data
@@ -181,9 +188,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	                	<?php $variations = $cart_item['variation']; ?>
 	                	<?php if ( count($variations) ) : ?>
 		                    <?php foreach ($variations as $key => $value) {
+
 		                        $idx = strrpos($key, 'pa_') + 3;
 		                        $key = strtoupper( substr($key, $idx) );
 
+                                $value = checkSize( $value );
 		                        $value = strtoupper( str_replace( '-', ' ', $value) );
 		                    }
 		                    ?>
