@@ -240,13 +240,13 @@ wc_print_notices();
     <div class="check_free_shipping_note"><?php //the_field('free_shipping_text','option') ?></div>
 <!-- 		<div class="checkout_total">SUBTOTAL : <?php wc_cart_totals_subtotal_html(); ?></div> -->
 		<input type="submit" class="button alt wc-forward the_button checkout_btn" name="proceed" value="<?php _e( 'CHECKOUT', 'woocommerce' ); ?>" />
-        <p>Taxes and shipping applied at checkout.</p>
+       
 <?php wp_nonce_field( 'woocommerce-cart' ); ?>
 	</form>
 
 	<?php do_action( 'woocommerce_proceed_to_checkout' ); ?>
 
-
+ <p style="clear: both; font-size: 13px; width: 50%; float: right; text-align: center;">Taxes and shipping applied at checkout.</p>
 
 <!--
     <div class="cart-collaterals">

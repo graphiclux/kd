@@ -56,6 +56,10 @@ input, textarea, select, button {
      font-size: 14px;
 }
 
+input[type=number] {
+	width: 35px;
+}
+
 .textwidget p{ padding: 0 0 10px 0; }
 
 .stock { display: none; }
@@ -269,6 +273,10 @@ a.paypal-express-checkout-button {
 	margin-top: 10px;
 	clear: both;
 	text-indent: -99999px;
+}
+
+.cart_right a.paypal-express-checkout-button, .cart_right #pay_with_amazon {
+    width: 50% !important;
 }
 
 .express_checkout_button_chekout_page {
