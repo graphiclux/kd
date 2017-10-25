@@ -24,8 +24,6 @@ wc_print_notices();
             <?php
             foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
 
-
-
                 $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                 $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
 
@@ -61,8 +59,9 @@ wc_print_notices();
                                 <?php foreach ($variations as $key => $value) {
                                     $idx = strrpos($key, 'pa_') + 3;
                                     $key = strtoupper( substr($key, $idx) );
-
+                                    $value = checkSize( $value );
                                     $value = strtoupper( str_replace( '-', ' ', $value) );
+
                                 }
                                 ?>
                                 <li><b><?= $key ?></b> : <?= $value ?></li>
@@ -123,40 +122,48 @@ wc_print_notices();
 </div>
 
 <div class="cart_right">
-	<div class="cart_discount_code">
         <? if ( WC()->cart->coupons_enabled() ): ?>
-            <div class="coupon">
+            <div class="cart_discount_code skin">
+                <div class="coupon">
 
-                <label for="coupon_code">
-                    <?php _e( 'Discount Code', 'woocommerce' ); ?>:</label>
-                <input type="submit" class="button" name="apply_coupon" value="<?php _e( 'APPLY', 'woocommerce' ); ?>" />
-                <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php _e( 'Enter Code', 'woocommerce' ); ?>" />
-                <? do_action('woocommerce_cart_coupon'); ?>
+                    <label for="coupon_code">
+                        <?php _e( 'Discount Code', 'woocommerce' ); ?>:</label>
+                    <input type="submit" class="button" name="apply_coupon" value="<?php _e( 'APPLY', 'woocommerce' ); ?>" />
+                    <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php _e( 'Enter Code', 'woocommerce' ); ?>" />
 
-            <? foreach ( WC()->cart->get_coupons() as $code => $coupon ): ?>
-                <?php
-                    $type = '&nbsp;';
-                    $_type = $coupon->get_discount_type();
+                    <? do_action('woocommerce_cart_coupon'); ?>
 
-                    if ( strpos('percent', $_type) ){
-                        $type = '%';
-                    } elseif ( strpos('fixed', $_type) ) {
-                        $type = '$';
-                    }
-                ?>
+                    <? $coupons = WC()->cart->get_coupons() ?>
+                    <? if( count( $coupons ) ): ?>
+                        <div class="cmrd-coupon-wrap">
+                            <p>
+                                <input type="submit" id="remove-coupons" value="Remove Coupons" class="button remove-coupon" />
+                            </p>
+                        </div>
+                    <? endif ?>
 
-                <div class="cmrd-coupon">
-                    <div class="cmrd-coupon-data">
-                        <em><?= $code ?>:&nbsp;</em><strong><?= $type ?><?= $coupon->amount ?></strong>
+                    <? foreach ( $coupons as $code => $coupon ): ?>
+                    <?php
+                        $type = '&nbsp;';
+                        $_type = $coupon->get_discount_type();
+
+                        if ( strpos('percent', $_type) ){
+                            $type = '%';
+                        } elseif ( strpos('fixed', $_type) ) {
+                            $type = '$';
+                        }
+                    ?>
+
+                    <div class="cmrd-coupon">
+                        <div class="cmrd-coupon-data">
+                            <em><?= $code ?>:&nbsp;</em><strong><?= $type ?><?= $coupon->amount ?></strong>
+                        </div>
                     </div>
-                    <input type="submit" value="Remove Coupons" class="button remove-coupon" data-code=" <?=$coupon->get_code()?> " />
+                <? endforeach ?>
+
                 </div>
-            <? endforeach ?>
-
             </div>
-
         <? endif ?>
-    </div>
 
 	<ul id="totals">
 		<li class="cart-subtotal">
