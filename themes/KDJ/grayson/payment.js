@@ -2,13 +2,13 @@ $=jQuery;
 
 function initialize() {
 
-	console.log('initialized');
+  console.log('initialized');
 
   clean_up_cart_variations();
 
-	// amazonCheckout = getUrlParameter('amazon_payments_advanced');
+  // amazonCheckout = getUrlParameter('amazon_payments_advanced');
   if ($('#amazon_addressbook_widget').length > 0) {
-    var amazonElement = $('.wc-amazon-checkout-message');
+    // var amazonElement = $('.wc-amazon-checkout-message');
     // $('#billing_header').prepend(amazonElement);
     $('.checkout_left #customer_details').hide();
     $('.cart_discount_code').hide();
@@ -25,19 +25,22 @@ function initialize() {
     showReviewAndPurchase();
   } else {
 
-    // MOVE THE AMAZON AND PAYPAL BUTTONS VIA SUBPAR WAY BECAUSE I COULDN'T FIGURE OUT HOW TO HOOK INTO THEM
-
-    if ($('#billing_header .wc-amazon-checkout-message.wc-amazon-payments-advanced-populated').length === 0) {
-      console.log('here');
-      var amazonElement = $('.wc-amazon-checkout-message');
-      $('#billing_header').prepend(amazonElement);
-      $(amazonElement).fadeIn();
-    }
-
     hidePayment();
 
-	}
+  }
+  if ( $('.checkout_left').length ) {
+    if ( $('.wc-amazon-checkout-message').length) {
+        var amazonElement = $('.wc-amazon-checkout-message');
+        $('#cmrd-payment-buttons h2').after(amazonElement);
+    }
 
+    if ( $('.express_checkout_button_chekout_page').length ) {
+      var paypalElement = $('.express_checkout_button_chekout_page');
+      $('#cmrd-payment-buttons h2').after(paypalElement);
+    }
+  }
+
+  // cmRD add remove coupon ajax functionality
   if ( $(".remove-coupon").length ) {
       $(".remove-coupon").click(function() {
           var code = $(this).data("code");
@@ -54,22 +57,13 @@ function initialize() {
   }
 
 
-  if ($('#billing_header .express_checkout_button_chekout_page').length === 0) {
-    var paypalElement = $('.express_checkout_button_chekout_page');
-    $('#billing_header').prepend(paypalElement);
-    $(paypalElement).fadeIn();
-  }
-
-
-
-
   if ($(window).width() < 1046) {
 
     // DISCOUNT CODE MOVE TO TOP ON MOBILE
 
-		if ($('.checkout_left .cart_discount_code').length === 0) {
+    if ($('.checkout_left .cart_discount_code').length === 0) {
       $('.cart_discount_code.skin').insertBefore('.checkout_left');
-		}
+    }
   }
 
 
@@ -112,8 +106,9 @@ function initialize() {
 
 
   $('#payment_continue').unbind().click(function() {
+        var payment_errors = validateForm('.woocommerce-checkout-payment');
 
-    if (($('#stripe-card-number').val() != "") && ($('#stripe-card-expiry').val() != "") && ($('#stripe-card-csv').val() != "")) {
+    if ( payment_errors.length === 0 ) {
 
       hidePayment();
       showReviewAndPurchase();
@@ -140,9 +135,10 @@ function initialize() {
       var cc_num = $('#stripe-card-number').val();
       var cc_len = cc_num.length;
       var hider = '*';
-      var _numField = hider.repeat(cc_len - 4) + cc_num.slice(-4);
-      var billingCardNumber = '<p>' + _numField + '</p>';
-
+      if (cc_len > 4) {
+          var _numField = hider.repeat(cc_len - 4) + cc_num.slice(-4);
+          var billingCardNumber = '<p>' + _numField + '</p>';
+      }
 
       if (typeof document.getElementById('stripe-card-number').className.split(/\s+/)[3] != 'undefined') {
 
@@ -173,7 +169,18 @@ function initialize() {
 
     } else {
 
-      alert('Please finish filling out your billing information before you can proceed.');
+        var warning = $(".woocommerce-checkout-payment .cmrd-warning");
+        $(warning).css("visibility", "visible");
+
+        $(".continue").on("click", function(e) {
+            $(warning).css("visibility", "hidden");
+            $(".continue").off(e);
+        });
+
+
+      $(payment_errors).each(function(idx, field) {
+          outlineRed(field);
+      });
 
       $('html,body').animate({
             scrollTop: $("#payment").offset().top - 50},
