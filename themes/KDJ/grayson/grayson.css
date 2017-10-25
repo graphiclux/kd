@@ -352,7 +352,7 @@ body::-webkit-scrollbar-thumb {
 
 .coupon {
 	display: block;
-    min-height: 90px;
+    min-height: 45px;
     /*overflow: hidden;*/
 }
 
@@ -360,12 +360,14 @@ body::-webkit-scrollbar-thumb {
 .cmrd-coupon {
     clear: both;
     display: block;
+    min-height: 45px;
 }
 
 
 .cmrd-coupon-data * {
     display: inline;
 }
+
 
 .product_slide {
     position: relative;
@@ -377,6 +379,10 @@ body::-webkit-scrollbar-thumb {
 }
 
 .coupon p input + br {
+    display: none;
+}
+
+.coupon br {
     display: none;
 }
 
@@ -1324,6 +1330,43 @@ div.MagicToolboxMainContainer {
     overflow: hidden;
 }
 
+.cmrd-coupon-data
+ {
+    width: 50%;
+}
+
+.cmrd-coupon-wrap {
+    float: right;
+    width: 25%;
+    clear: both;
+}
+
+#remove-coupons {
+    width: 100%;
+    font-size: 12px;
+}
+
+body div .cmrd-coupon-wrap p {
+    width: 100;
+    padding-left: 5px;
+}
+
+body.woocommerce-cart .cmrd-coupon-wrap p {
+    padding-left: 0 !important;
+}
+
 .cmrd-invalid {
     border: 2px solid red !important;
+}
+
+.cmrd-warning {
+    width: 100%;
+    background: rgb(223, 110, 103);
+    display: block;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 10px;
+    visibility: hidden;
 }
