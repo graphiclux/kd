@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . "/../../plugins/express-checkout/includes/class-express-checkout-api.php";
+
+
 global $am_option;
 
 if( isset( $_GET['showall'] ) ){
@@ -49,48 +52,48 @@ function get_subcategory_terms( $terms, $taxonomies, $args ) {
 // Register Style
 function custom_styles() {
 
-	wp_register_style( 'grayson', get_stylesheet_directory_uri() . '/grayson/grayson.css', false, '1' );
-	wp_register_style( 'sumner', get_stylesheet_directory_uri() . '/grayson/sumner/sumner.css', false, '1' );
-//	wp_register_style('jquery-mobile', 'http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css');
+    wp_register_style( 'grayson', get_stylesheet_directory_uri() . '/grayson/grayson.css', false, '1' );
+    wp_register_style( 'sumner', get_stylesheet_directory_uri() . '/grayson/sumner/sumner.css', false, '1' );
+//  wp_register_style('jquery-mobile', 'http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css');
 
 
-	wp_register_script( 'sumner-js', get_stylesheet_directory_uri() . '/grayson/sumner/sumner.js', array('jquery'), '1', false );
-	wp_register_script( 'grayson', get_stylesheet_directory_uri() . '/grayson/grayson.js', array('jquery'), '1', false );
-	wp_register_script( 'plugins', get_stylesheet_directory_uri() . '/grayson/jquery.plugin.min.js', false, '1' );
-	wp_register_script( 'jquery-mobile', 'https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js', false, false, true);
-	wp_register_script( 'grayson-payment', get_stylesheet_directory_uri() . '/grayson/payment.js', false, true );
+    wp_register_script( 'sumner-js', get_stylesheet_directory_uri() . '/grayson/sumner/sumner.js', array('jquery'), '1', false );
+    wp_register_script( 'grayson', get_stylesheet_directory_uri() . '/grayson/grayson.js', array('jquery'), '1', false );
+    wp_register_script( 'plugins', get_stylesheet_directory_uri() . '/grayson/jquery.plugin.min.js', false, '1' );
+    wp_register_script( 'jquery-mobile', 'https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js', false, false, true);
+    wp_register_script( 'grayson-payment', get_stylesheet_directory_uri() . '/grayson/payment.js', false, true );
 
 
-	wp_enqueue_script('plugins');
+    wp_enqueue_script('plugins');
 
-	$data = array(
-		'coupon_nonce' => wp_create_nonce('apply-coupon'),
-		'update_order_nonce' => wp_create_nonce('update-order-review')
-	);
+    $data = array(
+        'coupon_nonce' => wp_create_nonce('apply-coupon'),
+        'update_order_nonce' => wp_create_nonce('update-order-review')
+    );
 
-	wp_localize_script('grayson', 'localized_config', $data);
-	wp_enqueue_script( 'grayson');
+    wp_localize_script('grayson', 'localized_config', $data);
+    wp_enqueue_script( 'grayson');
 
 
   wp_enqueue_script('grayson-payment');
 
-	if (is_woocommerce()) {
+    if (is_woocommerce()) {
 
-		if (is_category() || is_single() || is_archive()) {
-			wp_enqueue_script('jquery-mobile');
-			wp_enqueue_script('sumner-js');
+        if (is_category() || is_single() || is_archive()) {
+            wp_enqueue_script('jquery-mobile');
+            wp_enqueue_script('sumner-js');
 
-		}
+        }
 
-	}
+    }
 //  wp_enqueue_style( 'jquery-mobile' );
 
-	wp_enqueue_style( 'grayson' );
-	wp_enqueue_style( 'sumner' );
+    wp_enqueue_style( 'grayson' );
+    wp_enqueue_style( 'sumner' );
 
 
 
- 	wp_enqueue_script( 'app', get_stylesheet_directory_uri() . '/includes/js/app.js', false, '', true);
+    wp_enqueue_script( 'app', get_stylesheet_directory_uri() . '/includes/js/app.js', false, '', true);
 
 
 }
@@ -136,110 +139,110 @@ function custom_override_checkout_fields( $fields ) {
      unset($fields['shipping']['shipping_country']);
 
      $fields['billing']['billing_first_name'] = array(
-	    'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
-	    'priority'		=> 10
+        'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
+        'priority'      => 10
      );
 
      $fields['billing']['billing_last_name'] = array(
-	    'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
-	    'priority'		=> 20
+        'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
+        'priority'      => 20
      );
 
      $fields['billing']['billing_email'] = array(
-	    'placeholder'   => _x('Email', 'placeholder', 'woocommerce'),
-	    'priority'		=> 30
+        'placeholder'   => _x('Email', 'placeholder', 'woocommerce'),
+        'priority'      => 30
      );
 
      $fields['billing']['billing_address_1'] = array(
-	    'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
-	    'priority'		=> 40
+        'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
+        'priority'      => 40
      );
 
      $fields['billing']['billing_address_2'] = array(
-	    'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
-	    'priority'		=> 50
+        'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
+        'priority'      => 50
      );
 
      $fields['billing']['billing_country'] = array(
-	    'type'			=> 'country',
-	    'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
-	    'priority'		=> 60
+        'type'          => 'country',
+        'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
+        'priority'      => 60
      );
 
      $fields['billing']['billing_city'] = array(
-	    'type'			=> 'text',
-	    'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
-	    'priority'		=> 70
+        'type'          => 'text',
+        'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
+        'priority'      => 70
      );
 
      $fields['billing']['billing_state'] = array(
-	    'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
-	    'type'   => 'state',
-	    'priority'		=> 80
+        'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
+        'type'   => 'state',
+        'priority'      => 80
      );
 
      $fields['billing']['billing_postcode'] = array(
-	    'type'			=> 'text',
-	    'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
-	    'priority'		=> 90
+        'type'          => 'text',
+        'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
+        'priority'      => 90
      );
 
      $fields['billing']['billing_phone'] = array(
-	    'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
-	    'required'  => false,
-	    'class'     => array('form-row-wide'),
-	    'clear'     => true,
-	    'priority'	=> 95
+        'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
+        'required'  => false,
+        'class'     => array('form-row-wide'),
+        'clear'     => true,
+        'priority'  => 95
      );
 
 
      $fields['shipping']['shipping_first_name'] = array(
-	    'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
-	    'priority' 		=> 10
+        'placeholder'   => _x('First Name', 'placeholder', 'woocommerce'),
+        'priority'      => 10
      );
 
      $fields['shipping']['shipping_last_name'] = array(
-	    'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
-	    'priority' 		=> 20
+        'placeholder'   => _x('Last Name', 'placeholder', 'woocommerce'),
+        'priority'      => 20
      );
 
      $fields['shipping']['shipping_address_1'] = array(
-	    'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
-	    'priority' 		=> 30
+        'placeholder'   => _x('Street Address 1', 'placeholder', 'woocommerce'),
+        'priority'      => 30
      );
 
      $fields['shipping']['shipping_address_2'] = array(
-	    'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
-	    'priority' 		=> 40
+        'placeholder'   => _x('Street Address 2', 'placeholder', 'woocommerce'),
+        'priority'      => 40
      );
 
      $fields['shipping']['shipping_country'] = array(
-	     'type'			=> 'country',
-	    'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
-	    'priority' 		=> 60
+         'type'         => 'country',
+        'placeholder'   => _x('Country', 'placeholder', 'woocommerce'),
+        'priority'      => 60
      );
 
      $fields['shipping']['shipping_postcode'] = array(
-	    'type'			=> 'text',
-	    'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
+        'type'          => 'text',
+        'placeholder'   => _x('Zip', 'placeholder', 'woocommerce'),
      );
 
      $fields['shipping']['shipping_city'] = array(
-	    'type'			=> 'text',
-	    'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
+        'type'          => 'text',
+        'placeholder'   => _x('City', 'placeholder', 'woocommerce'),
      );
 
      $fields['shipping']['shipping_state'] = array(
-	    'type'			=> 'state',
-	    'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
+        'type'          => 'state',
+        'placeholder'   => _x('State', 'placeholder', 'woocommerce'),
      );
 
      $fields['shipping']['shipping_phone'] = array(
-	    'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
-	    'required'  => false,
-	    'class'     => array('form-row-wide'),
-	    'clear'     => true,
-	    'priority'	=> 90
+        'placeholder'   => _x('Phone', 'placeholder', 'woocommerce'),
+        'required'  => false,
+        'class'     => array('form-row-wide'),
+        'clear'     => true,
+        'priority'  => 90
      );
 
      unset($fields['order']['order_comments']);
@@ -262,34 +265,34 @@ add_filter('woocommerce_update_order_review_fragments', 'websites_depot_order_fr
 
 function websites_depot_order_fragments_split_shipping($order_fragments) {
 
-	ob_start();
-	websites_depot_woocommerce_order_review_shipping_split();
-	$websites_depot_woocommerce_order_review_shipping_split = ob_get_clean();
+    ob_start();
+    websites_depot_woocommerce_order_review_shipping_split();
+    $websites_depot_woocommerce_order_review_shipping_split = ob_get_clean();
 
-	$order_fragments['.websites-depot-checkout-review-shipping-table'] = $websites_depot_woocommerce_order_review_shipping_split;
+    $order_fragments['.websites-depot-checkout-review-shipping-table'] = $websites_depot_woocommerce_order_review_shipping_split;
 
-	return $order_fragments;
+    return $order_fragments;
 
 }
 
 // We'll get the template that just has the shipping options that we need for the new table
 function websites_depot_woocommerce_order_review_shipping_split( $deprecated = false ) {
-	wc_get_template( 'checkout/shipping-order-review.php', array( 'checkout' => WC()->checkout() ) );
+    wc_get_template( 'checkout/shipping-order-review.php', array( 'checkout' => WC()->checkout() ) );
 }
 
 
 add_action('woocommerce_after_checkout_shipping_form', 'websites_depot_move_new_shipping_table', 5);
 function websites_depot_move_new_shipping_table() {
-	echo '<div class="shop_table websites-depot-checkout-review-shipping-table"></div>';
+    echo '<div class="shop_table websites-depot-checkout-review-shipping-table"></div>';
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// KEEP SHOPPING LINK
 add_action( 'woocommerce_before_checkout_form', 'add_keep_shopping_link' );
 function add_keep_shopping_link() {
-	echo '<a class="continue_shopping_link" href="/product-category/whats-new/">';
-		_e( '&larr; KEEP SHOPPING', 'woocommerce' );
-	echo '</a><span class="help">Need help? Contact us now: <a href="mailto:info@katiedeanjewelry.com">info@katiedeanjewelry.com</a></span>';
+    echo '<a class="continue_shopping_link" href="/product-category/whats-new/">';
+        _e( '&larr; KEEP SHOPPING', 'woocommerce' );
+    echo '</a><span class="help">Need help? Contact us now: <a href="mailto:info@katiedeanjewelry.com">info@katiedeanjewelry.com</a></span>';
 }
 
 
@@ -297,11 +300,11 @@ function add_keep_shopping_link() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// BILLING
 add_action( 'woocommerce_before_checkout_billing_form', 'add_billing_header' );
 function add_billing_header() {
-	echo '<h3>';
-		_e( '1. Customer Information', 'woocommerce' );
-	echo '</h3>';
-	echo '<a href="#" id="billing_edit" class="checkout_edit">EDIT</a>';
-	echo '<div class="field_review" id="billing_field_review"></div>';
+    echo '<h3>';
+        _e( '1. Customer Information', 'woocommerce' );
+    echo '</h3>';
+    echo '<a href="#" id="billing_edit" class="checkout_edit">EDIT</a>';
+    echo '<div class="field_review" id="billing_field_review"></div>';
 }
 
 
@@ -310,15 +313,15 @@ function add_billing_header() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// SHIPPING
 add_action( 'woocommerce_after_checkout_shipping_form', 'add_shipping_continue_button' );
 function add_shipping_continue_button() {
-	echo '<a href="#" class="continue" id="shipping_continue">Continue</a>';
+    echo '<a href="#" class="continue" id="shipping_continue">Continue</a>';
 }
 add_action( 'woocommerce_before_checkout_shipping_form', 'add_shipping_header' );
 function add_shipping_header() {
-	echo '<h3>';
-		_e( '2. Shipping', 'woocommerce' );
-	echo '</h3>';
-	echo '<a href="#" id="shipping_edit" class="checkout_edit">EDIT</a>';
-	echo '<div class="field_review" id="shipping_field_review"></div>';
+    echo '<h3>';
+        _e( '2. Shipping', 'woocommerce' );
+    echo '</h3>';
+    echo '<a href="#" id="shipping_edit" class="checkout_edit">EDIT</a>';
+    echo '<div class="field_review" id="shipping_field_review"></div>';
 }
 
 
@@ -332,17 +335,17 @@ add_action( 'woocommerce_before_checkout_coupon', 'woocommerce_checkout_coupon_f
 
 // rename the coupon field on the checkout page
 function woocommerce_rename_coupon_field_on_checkout( $translated_text, $text, $text_domain ) {
-	// bail if not modifying frontend woocommerce text
-	if ( is_admin() || 'woocommerce' !== $text_domain ) {
-		return $translated_text;
-	}
-	if ( 'Coupon code' === $text ) {
-		$translated_text = 'Enter Code';
+    // bail if not modifying frontend woocommerce text
+    if ( is_admin() || 'woocommerce' !== $text_domain ) {
+        return $translated_text;
+    }
+    if ( 'Coupon code' === $text ) {
+        $translated_text = 'Enter Code';
 
-	} elseif ( 'Apply Coupon' === $text ) {
-		$translated_text = 'APPLY';
-	}
-	return $translated_text;
+    } elseif ( 'Apply Coupon' === $text ) {
+        $translated_text = 'APPLY';
+    }
+    return $translated_text;
 }
 add_filter( 'gettext', 'woocommerce_rename_coupon_field_on_checkout', 10, 3 );
 
@@ -355,17 +358,17 @@ add_action( 'woocommerce_checkout_before_order_review', 'woocommerce_checkout_pa
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// REVIEW
 add_action( 'woocommerce_checkout_before_order_review', 'review_and_purchase' );
 function review_and_purchase() {
-	echo '<div class="review_and_purchase">';
-		echo '<h3>';
-			_e( '4. Review & Purchase', 'woocommerce' );
-		echo '</h3>';
+    echo '<div class="review_and_purchase">';
+        echo '<h3>';
+            _e( '4. Review & Purchase', 'woocommerce' );
+        echo '</h3>';
 
-		echo '<span class="review_and_purchase_instructions">';
-			echo "Click the purchase button below after you have reviewed your information.";
-		echo '</span>';
+        echo '<span class="review_and_purchase_instructions">';
+            echo "Click the purchase button below after you have reviewed your information.";
+        echo '</span>';
 
-		echo apply_filters( 'woocommerce_order_button_html', '<input type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="PURCHASE" data-value="PURCHASE" />' );
-	echo '</div>';
+        echo apply_filters( 'woocommerce_order_button_html', '<input type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="PURCHASE" data-value="PURCHASE" />' );
+    echo '</div>';
 }
 
 /* create buton for removing coupons */
@@ -383,6 +386,108 @@ function filter_woocommerce_thankyou_order_received_text( $var, $order ) {
     return $var;
 };
 
+function get_paypal_response() {
+    $gateway_id = 'twZRsYGlwWHw6NXvdcqbhI4ZzcyCF1wD3j8OuvxsusmlpGjvQKURQaNbbXC';
+    $api_environment = true;
+    $api_username = "mlux@graphiclux.com";
+    $api_password = '#nBjchB$eB&ITx6P';
+    $api_signature = null;
+    $debug = 'true';
+    $token = WC()->session->paypal_express_checkout['token'];
+
+    $express_checkout = new Express_Checkout_API($gateway_id, $api_environment, $api_username, $api_password, $api_signature, $debug);
+    echo json_encode( $express_checkout->ex_get_express_checkout_details($token) );
+    wp_die();
+
+
+}
+
+add_action('wp_ajax_get_paypal_response', 'get_paypal_response');
+add_action('wp_ajax_nopriv_get_paypal_response', 'get_paypal_response');
+
+/**
+* @descr Shows the key/value product variations at cart and checkout pages
+* @param Array $variations The WooCOmmerce product variations array
+* @return String $html
+*/
+
+function show_variations( $variations, $cart_item ) {
+    foreach ($variations as $key => $value) {
+        if ( empty($key) || empty($value) ) {
+            continue;
+        }
+
+        if (strpos( $key, 'color') ) {
+
+            $key = strpos( '_'.$key, 'stone') ? 'STONE COLOR' : 'COLOR';
+            $value= format_color($value);
+            // echo "<li><b>$key</b> : $value</li>";
+            // continue;
+
+        } else if ( strpos( $key, 'size' ) ) {
+
+            $key = "SIZE";
+            $value = format_size( $value );
+
+        } else {
+
+            $idx = strrpos( $key, 'pa_' ) + 3;
+
+        }
+
+        $key = strtoupper( str_replace( '-', ' ', $key ) );
+        $value = strtoupper( str_replace( '-', ' ', $value) );
+
+    ?>
+    <li><b><?= $key ?></b> : <?= $value ?></li>
+
+    <?php
+
+    }
+
+    return;
+}
+
+function show_applied_coupons($coupons) {
+    echo "<ul>";
+    foreach ( $coupons as $code => $coupon ) {
+
+        $type = '&nbsp;';
+        $_type = $coupon->get_discount_type();
+
+        if ( strpos('percent', $_type) ) { $type = '%'; };
+        if ( strpos('fixed', $_type) ) { $type = '$'; };
+
+        ?>
+
+            <li>
+                <em><?= $code ?>:&nbsp;</em><strong><?= $type ?><?= $coupon->amount ?></strong>
+            </li>
+
+        <?php
+    }
+
+    echo "</ul>";
+
+}
+
+function format_color($value) {
+    return strtoupper( str_replace( '-', ' ', $value) );
+}
+
+
+function format_size(string $value) {
+    $checks = substr( $value, -2 );
+
+    if ( ! (intval($checks[0]) !== 0 && intval($checks[1]) !== 0) ) {
+        return $value;
+    }
+    $new = $checks[0] .'/'.$checks[1];
+
+    $newval = str_replace( $checks, $new, $value );
+
+    return $newval;
+}
 
 // add the filter
 add_filter( 'woocommerce_thankyou_order_received_text', 'filter_woocommerce_thankyou_order_received_text', 10, 2 );
