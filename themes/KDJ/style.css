@@ -68,6 +68,18 @@ input[type=number] {
 	width: 50%;
 }
 
+input.button.remove-coupon {
+    background: none;
+    color: #000 !important;
+    border: 0px;
+    height: inherit;
+    font-size: 11px;
+}
+
+.cmrd-coupon {
+    min-height: initial;
+}
+
 span.help {
     text-align: center;
     width: 100%;
