@@ -686,273 +686,314 @@ function product_swipe(swipe, elementClass, count) {
 }
 
 
-    /* cmRD Scripts */
-    $(document).ready( function() {
-        setTimeout( callScripts, 700);
-    });
+/* cmRD Scripts */
+$(document).ready( function() {
+    setTimeout( callScripts, 700);
+});
 
-    function callScripts() {
-        console.log("cmrd");
+function callScripts() {
+    console.log("cmrd");
 
-        /* If it is a single product page, check page for loaded image gallery */
-        if ( $("body.single-product").length ) {
+    /* If it is a single product page, check page for loaded image gallery */
+    if ( $("body.single-product").length ) {
 
-            var trigger = ".thumbnail-scroll";
-            var checker = setInterval( function() {
-                if ( $(trigger).length ) {
-                    clearInterval(checker);
+        var trigger = ".thumbnail-scroll";
+        var checker = setInterval( function() {
+            if ( $(trigger).length ) {
+                clearInterval(checker);
 
-                    var target = ".MagicToolboxSelectorsContainer div[id^=Magic]";
+                var target = ".MagicToolboxSelectorsContainer div[id^=Magic]";
 
-                    if ( !$(target).length ) {
-                        target = ".mcs-items-container";
-                    }
-                    setAutoScroll( trigger, target );
-
-                    /* Function not animating on firt trigger
-                           this emulates the first and second triggers, just to make sure
-                           it works as expected.
-                    */
-                        $( $(trigger).children()[0] ).mouseenter();
-                        $( $(trigger).children()[0] ).mouseleave();
-
-                        $( $(trigger).children()[0] ).mouseenter();
-                        $( $(trigger).children()[0] ).mouseleave();
+                if ( !$(target).length ) {
+                    target = ".mcs-items-container";
                 }
-            }, 200);
-        }
+                setAutoScroll( trigger, target );
 
-        /* Set shipping script to force international when non United States is selected */
-        if ( $("body.woocommerce-checkout").length ) {
+                /* Function not animating on firt trigger
+                       this emulates the first and second triggers, just to make sure
+                       it works as expected.
+                */
+                    $( $(trigger).children()[0] ).mouseenter();
+                    $( $(trigger).children()[0] ).mouseleave();
 
-            // Woocommerce forces my element to be a child of <p>. This undoes that.
-            $(".cmrd-warning").unwrap();
+                    $( $(trigger).children()[0] ).mouseenter();
+                    $( $(trigger).children()[0] ).mouseleave();
+            }
+        }, 200);
+    }
 
-            var trigger = $("#billing_continue");
+    /* Set shipping script to force international when non United States is selected */
+    if ( $("body.woocommerce-checkout").length ) {
 
-            // Wait for the elements to finish loading before calling script
-            var checker = setInterval( function() {
-                if ( $(trigger).length ) {
-                    clearInterval(checker);
+        // Woocommerce forces my element to be a child of <p>. This undoes that.
+        $(".cmrd-warning").unwrap();
+
+        var trigger = $("#billing_continue");
+
+        // Wait for the elements to finish loading before calling script
+        var checker = setInterval( function() {
+            if ( $(trigger).length ) {
+                clearInterval(checker);
+
+                window.countrySelect = $("#shipping_country");
+                window.optSelect = $("select[id^='shipping_method']");
+
+                var checker2 = setInterval(function() {
+                    if ( countrySelect.length && optSelect.length ) {
+                        clearInterval(checker2);
+                        shippingScript();
+                    }
 
                     window.countrySelect = $("#shipping_country");
                     window.optSelect = $("select[id^='shipping_method']");
-
-                    var checker2 = setInterval(function() {
-                        if ( countrySelect.length && optSelect.length ) {
-                            clearInterval(checker2);
-                            shippingScript();
-                        }
-
-                        window.countrySelect = $("#shipping_country");
-                        window.optSelect = $("select[id^='shipping_method']");
-                    }, 200);
-                }
-
-            }, 200);
-        }
-
-
-       /* Ajax to add remove coupon functinoality to checkout and cart page */
-        $(".remove-coupon").click(function() {
-            var code = $(this).data("code");
-            $.ajax({
-                method: "post",
-                data: {
-                    action: 'cmrd_remove_coupon',
-                    code: code
-                },
-                url: ajax_url,
-                complete: location.reload()
-            });
-        });
-    }
-
-    /**
-    * @descr If a field has any kind of value, it passes. Else it is pushed into errors.
-    * @param string jQuery selector to target the form
-    * @return errors Array of inputs with no values
-    */
-    function validateForm( form ) {
-        var errors = [];
-        var whiteList = [$("#shipping_address_2")[0], $("#billing_address_2")[0] ];
-
-        var inputs = $(form + " input[type=text]," +  form + " select");
-
-        $(inputs).each(function(idx, field) {
-            if ( $(field).is(":visible") ) {
-
-                if ( !$(field).val() ) {
-                    $.inArray(field, whiteList) >= 0  ? '' : errors.push(field);
-                }
-
-            }
-        });
-
-        return errors;
-    }
-
-    /**
-    * @descr Highlights a form field in red to emphasize it currently is invalid.
-    * @param field An HTML element
-    */
-    function outlineRed( field ) {
-        $(field).addClass("cmrd-invalid");
-
-        $(field).on("change", function(e) {
-            $(field).removeClass("cmrd-invalid");
-            $(field).off(e);
-        });
-    }
-
-    /**
-    * @descr Forces international shipping option if the shipping country is not United States
-    */
-    function shippingScript() {
-
-        //international shipping option
-        var world = $(optSelect).children("option[value='woocommerce_flatrate_percountry']");
-
-        // domestic shipping options
-        var domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
-        var wcInternational = $(optSelect).children("option[value='flat_rate:5']");
-
-        if ( wcInternational.length ) {
-            $(wcInternational).remove();
-        }
-
-        function showDomestics() {
-            $(domestics).show();
-        }
-
-        function hideDomestics() {
-            $(domestics).hide();
-            var selected = $(optSelect).children(":selected");
-
-            if ( $(selected).is(domestics) ) {
-                $(selected).removeAttr("selected");
-                $(world).click();
-                $(optSelect).trigger("change");
-                $(world).attr("selected", "selected");
-            }
-        }
-
-        if ( domestics.length < 2 ) {
-            var opt = document.createElement("option");
-            var opt2 = document.createElement("option");
-            opt.value = "flat_rate:2";
-            $(opt).val("flat_rate:2").text("Domestic Shipping + Tracking (arrival time: 3-5 business days after shipped): $7.50");
-            $(opt2).val("flat_rate:4").text("Expedited 2 Day Shipping (Domestic Only): $25.00")
-
-            $("#shipping_method_0").append(opt, opt2);
-
-            domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
-
-            hideDomestics();
-        }
-
-
-        $(countrySelect).on("change", function() {
-            if ( domestics.length ) {
-
-                var selected = $(this).children("option:selected");
-                $(selected).val() === 'US' ? showDomestics() : hideDomestics();
-
+                }, 200);
             }
 
-        });
+        }, 200);
     }
 
 
-    /**
-    * @descr Adds an autoscroll feature on hover or click to target element
-    * @param String trigger jQuery selector of the element that triggers scrolling
-    * @param String target jQuery selector of element to get the event listener
-    */
-    function setAutoScroll( trigger, target ) {
-        if ( typeof(target) == 'undefined' ) {
-            return;
+   /* Ajax to add remove coupon functinoality to checkout and cart page */
+    $(".remove-coupon").click(function() {
+        var code = $(this).data("code");
+        $.ajax({
+            method: "post",
+            data: {
+                action: 'cmrd_remove_coupon',
+                code: code
+            },
+            url: ajax_url,
+            complete: location.reload()
+        });
+    });
+}
+
+/**
+* @descr If a field has any kind of value, it passes. Else it is pushed into errors.
+* @param string jQuery selector to target the form
+* @return errors Array of inputs with no values
+*/
+function validateForm( form ) {
+    var errors = [];
+    var whiteList = [$("#shipping_address_2")[0], $("#billing_address_2")[0] ];
+
+    var inputs = $(form + " input[type=text]," +  form + " select");
+
+    $(inputs).each(function(idx, field) {
+        if ( $(field).is(":visible") ) {
+
+            if ( !$(field).val() ) {
+                $.inArray(field, whiteList) >= 0  ? '' : errors.push(field);
+            }
+
+        }
+    });
+
+    return errors;
+}
+
+/**
+* @descr Highlights a form field in red to emphasize it currently is invalid.
+* @param field An HTML element
+*/
+function outlineRed( field ) {
+    $(field).addClass("cmrd-invalid");
+
+    $(field).on("change", function(e) {
+        $(field).removeClass("cmrd-invalid");
+        $(field).off(e);
+    });
+}
+
+/**
+* @descr Forces international shipping option if the shipping country is not United States
+*/
+function shippingScript() {
+    //international shipping option
+    var world = $(optSelect).children("option[value='woocommerce_flatrate_percountry']");
+
+    // domestic shipping options
+    var domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
+    var wcInternational = $(optSelect).children("option[value='flat_rate:5']");
+
+    if ( wcInternational.length ) {
+        $(wcInternational).remove();
+    }
+
+    function showDomestics() {
+        $(domestics).show();
+        $(world).hide();
+
+        var selected = $(optSelect).children(":selected");
+
+        if ( $(selected).is(world) ) {
+            $(selected).removeAttr("selected");
         }
 
-        window.isScrolling = false;
+        $(domestics[0]).click();
+        $(optSelect).trigger("change");
+        $(domestics[0]).attr("selected", "selected");
+    }
 
-        $(trigger).children().on("mouseenter click", function(e) {
-            e.preventDefault();
+    function hideDomestics() {
+        $(domestics).hide();
+        $(world).show();
+        var selected = $(optSelect).children(":selected");
 
-            if (e.type === "click" && isScrolling === true ) {
-                $(trigger).children().off("mouseleave");
-                console.log("click");
+        if ( $(selected).is(domestics) ) {
+            $(selected).removeAttr("selected");
+
+        }
+
+        $(world).click();
+        $(optSelect).trigger("change");
+        $(world).attr("selected", "selected");
+    }
+
+    // Ensures the required options exist
+    if ( domestics.length < 2 ) {
+        var opt = document.createElement("option");
+        var opt2 = document.createElement("option");
+        opt.value = "flat_rate:2";
+        $(opt).val("flat_rate:2").text("Domestic Shipping + Tracking (arrival time: 3-5 business days after shipped): $7.50");
+        $(opt2).val("flat_rate:4").text("Expedited 2 Day Shipping (Domestic Only): $25.00")
+
+        $("#shipping_method_0").append(opt, opt2);
+
+        domestics = $(optSelect).children("option:not([value='woocommerce_flatrate_percountry'])");
+
+        hideDomestics();
+    }
+
+
+    $(countrySelect).on("change", function() {
+        if ( domestics.length ) {
+
+            var selected = $(this).children("option:selected");
+            $(selected).val() === 'US' ? showDomestics() : hideDomestics();
+
+        }
+
+    });
+
+    function init() {
+        var country = $(countrySelect).val();
+
+        console.log("Init", country);
+
+        country == 'US' ? showDomestics() : hideDomestics();
+    }
+
+    init();
+}
+
+
+/**
+* @descr Adds an autoscroll feature on hover or click to target element
+* @param String trigger jQuery selector of the element that triggers scrolling
+* @param String target jQuery selector of element to get the event listener
+*/
+function setAutoScroll( trigger, target ) {
+    if ( typeof(target) == 'undefined' ) {
+        return;
+    }
+
+    window.isScrolling = false;
+
+    $(trigger).children().on("mouseenter click", function(e) {
+        e.preventDefault();
+
+        if (e.type === "click" && isScrolling === true ) {
+            $(trigger).children().off("mouseleave");
+            console.log("click");
+            clearInterval(scrolling);
+        } else {
+            window.scrolled = 0;
+        }
+
+        var maxHeight = parseInt( $(target).css("height") );
+
+        scrolling = setInterval(function() {
+            console.log("scrolling");
+            isScrolling = true;
+            var property = $(target).css("transform");
+            var startIdx = property.lastIndexOf(",") + 1;
+            var stopIdx = property.lastIndexOf(")");
+
+            var scrollTop = parseInt( property.slice( startIdx, stopIdx ) );
+
+            scrollTop -= 3;
+            scrolled += 3;
+
+            var newProp = "matrix(1, 0, 0, 1, 0, " + scrollTop + ")";
+
+            console.log(scrolled, newProp);
+
+            $(target).css("transform", newProp);
+
+            if ( scrolled > maxHeight ) {
                 clearInterval(scrolling);
-            } else {
-                window.scrolled = 0;
+                window.isScrolling = false;
+                resetHeight(target);
             }
 
-            var maxHeight = parseInt( $(target).css("height") );
+        }, 30);
 
-            scrolling = setInterval(function() {
-                console.log("scrolling");
-                isScrolling = true;
-                var property = $(target).css("transform");
-                var startIdx = property.lastIndexOf(",") + 1;
-                var stopIdx = property.lastIndexOf(")");
-
-                var scrollTop = parseInt( property.slice( startIdx, stopIdx ) );
-
-                scrollTop -= 3;
-                scrolled += 3;
-
-                var newProp = "matrix(1, 0, 0, 1, 0, " + scrollTop + ")";
-
-                console.log(scrolled, newProp);
-
-                $(target).css("transform", newProp);
-
-                if ( scrolled > maxHeight ) {
-                    clearInterval(scrolling);
-                    window.isScrolling = false;
-                    resetHeight(target);
-                }
-
-            }, 30);
-
-            if (e.type === "mouseenter") {
-                $(trigger).children().on("mouseleave", function() {
-                    clearInterval( scrolling );
-                    window.isScrolling = false;
-                    resetHeight( target );
-                });
-            }
-
-        });
-    }
-
-    function resetHeight( target ) {
-        var matrix = "matrix(1, 0, 0, 1, 0, 0)";
-        var props = {
-            "webkitTransform": matrix,
-            "MozTransform": matrix,
-            "msTransform": matrix,
-            "OTransform": matrix,
-            "transform": matrix
-        };
-        $(target).css(props);
-    }
-
-    function saysWho() {
-        var ua= navigator.userAgent, tem,f
-        M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-        if(/trident/i.test(M[1])){
-            tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-            return 'IE '+(tem[1] || '');
+        if (e.type === "mouseenter") {
+            $(trigger).children().on("mouseleave", function() {
+                clearInterval( scrolling );
+                window.isScrolling = false;
+                resetHeight( target );
+            });
         }
-        if(M[1]=== 'Chrome'){
-            tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
-            if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-        }
-        M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-        console.log(M);
-        console.log(tem);
-        // if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
-        return M.join(' ');
+
+    });
+}
+
+function resetHeight( target ) {
+    var matrix = "matrix(1, 0, 0, 1, 0, 0)";
+    var props = {
+        "webkitTransform": matrix,
+        "MozTransform": matrix,
+        "msTransform": matrix,
+        "OTransform": matrix,
+        "transform": matrix
+    };
+    $(target).css(props);
+}
+
+function saysWho() {
+    var ua= navigator.userAgent, tem,f
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
     }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    console.log(M);
+    console.log(tem);
+    // if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+}
+
+/**
+* @descr Ajax to PayPal to get payment data
+*/
+
+function fetchPaypalDetails() {
+
+    $.ajax({
+        method: "post",
+        data: {
+            action: 'get_paypal_response',
+            order: "333"
+        },
+        url: ajax_url,
+        complete: (data) => console.log( data )
+    });
+}
 
