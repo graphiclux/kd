@@ -729,6 +729,9 @@ function callScripts() {
         // Woocommerce forces my element to be a child of <p>. This undoes that.
         $(".cmrd-warning").unwrap();
 
+        // Scroll to billing when you click on credit card button
+        scrollToBilling();
+
         var triggerShip = $("#billing_continue");
 
         // Wait for the elements to finish loading before calling script
@@ -1023,14 +1026,24 @@ function patchCheckout() {
 
     var target = $(parent).css("background-image").replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
 
-    console.log("target is : " + target);
-    if (target.indexOf("checkout")) {
+    if ( target.indexOf("juju") === -1 ) {
         $(parent).attr("style", "background: url(https://katiedeanjewel.staging.wpengine.com/wp-content/uploads/2017/09/badjujuimage.jpg)");
         $(parent).html(`
             <span class="checkout_and_cart_featured_text">Protect yourself from all the bad juju with the Evil Eye Ring!</span><br>
                 <a href="https://katiedeanjewel.staging.wpengine.com/shop/rings/evil-eye-ring-2/" class="cta" id="featured_checkout_item" data-product-id="2692">ADD TO CART</a>
         `);
     }
-
 }
+
+function scrollToBilling() {
+    var cc = $("#cmrd-payment-methods");
+    var target = $("#wc-billing-fields");
+
+    $(cc).click(function(e) {
+        $("html, body").animate({
+            scrollTop: $(target).offset().top
+        }, 1000);
+    });
+}
+
 
