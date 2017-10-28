@@ -24,8 +24,6 @@ wc_print_notices();
             <?php
             foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
 
-
-
                 $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
                 $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
 
@@ -58,15 +56,8 @@ wc_print_notices();
                             <ul>
                                 <?php $variations = $cart_item['variation']; ?>
                                 <?php if ( count($variations) ) : ?>
-                                <?php foreach ($variations as $key => $value) {
-                                    $idx = strrpos($key, 'pa_') + 3;
-                                    $key = strtoupper( substr($key, $idx) );
+                                    <?php show_variations($variations, $cart_item) ?>
 
-                                    $value = strtoupper( str_replace( '-', ' ', $value) );
-                                }
-                                ?>
-                                <li><b><?= $key ?></b> : <?= $value ?></li>
-                                <li><b>Qty:</b> <?= $cart_item['quantity']; ?>
                                 <?php endif ?>
                                 <li>$<?php echo $_product->get_price(); ?></li>
 
@@ -133,26 +124,19 @@ wc_print_notices();
                 <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php _e( 'Enter Code', 'woocommerce' ); ?>" />
                 <? do_action('woocommerce_cart_coupon'); ?>
 
-            <? foreach ( WC()->cart->get_coupons() as $code => $coupon ): ?>
-                <?php
-                    $type = '&nbsp;';
-                    $_type = $coupon->get_discount_type();
+                <? $coupons = WC()->cart->get_coupons() ?>
+                <? if( count( $coupons ) ): ?>
 
-                    if ( strpos('percent', $_type) ){
-                        $type = '%';
-                    } elseif ( strpos('fixed', $_type) ) {
-                        $type = '$';
-                    }
-                ?>
+                    <div class="cmrd-coupon">
+                        <div class="cmrd-coupon-data">
+                            <? show_applied_coupons($coupons) ?>
+                        </div>
 
-                <div class="cmrd-coupon">
-                    <div class="cmrd-coupon-data">
-                        <em><?= $code ?>:&nbsp;</em><strong><?= $type ?><?= $coupon->amount ?></strong>
+                        <input type="submit" id="remove-coupons" value="Remove Coupons" class="button remove-coupon" />
+
                     </div>
-                    <input type="submit" value="Remove Coupons" class="button remove-coupon" data-code=" <?=$coupon->get_code()?> " />
-                </div>
-            <? endforeach ?>
 
+                <? endif ?>
             </div>
 
         <? endif ?>
@@ -240,7 +224,7 @@ wc_print_notices();
     <div class="check_free_shipping_note"><?php //the_field('free_shipping_text','option') ?></div>
 <!-- 		<div class="checkout_total">SUBTOTAL : <?php wc_cart_totals_subtotal_html(); ?></div> -->
 		<input type="submit" class="button alt wc-forward the_button checkout_btn" name="proceed" value="<?php _e( 'CHECKOUT', 'woocommerce' ); ?>" />
-       
+
 <?php wp_nonce_field( 'woocommerce-cart' ); ?>
 	</form>
 
