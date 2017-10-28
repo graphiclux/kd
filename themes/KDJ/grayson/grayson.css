@@ -352,7 +352,7 @@ body::-webkit-scrollbar-thumb {
 
 .coupon {
 	display: block;
-    min-height: 90px;
+    min-height: 45px;
     /*overflow: hidden;*/
 }
 
@@ -360,11 +360,12 @@ body::-webkit-scrollbar-thumb {
 .cmrd-coupon {
     clear: both;
     display: block;
+    min-height: 45px;
 }
 
 
-.cmrd-coupon-data * {
-    display: inline;
+.cmrd-coupon-data ul li {
+    list-style: none;
 }
 
 .product_slide {
@@ -377,6 +378,10 @@ body::-webkit-scrollbar-thumb {
 }
 
 .coupon p input + br {
+    display: none;
+}
+
+.coupon br {
     display: none;
 }
 
@@ -1324,6 +1329,66 @@ div.MagicToolboxMainContainer {
     overflow: hidden;
 }
 
+.cmrd-coupon-data
+ {
+    width: 50%;
+}
+
+.cmrd-coupon-wrap {
+    float: right;
+    width: 25%;
+    clear: both;
+}
+
+body.woocommerce-checkout .remove-coupon,
+body.woocommerce-cart .remove-coupon {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    color: #333 !important;
+}
+
+body div .cmrd-coupon-wrap p {
+    width: 100;
+    padding-left: 5px;
+}
+
+body.woocommerce-cart .cmrd-coupon-wrap p {
+    padding-left: 0 !important;
+}
+
 .cmrd-invalid {
     border: 2px solid red !important;
+}
+
+.cmrd-warning {
+    width: 100%;
+    background: rgb(223, 110, 103);
+    display: block;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#cmrd-payment-buttons {
+    background: white;
+    width: 100%;
+    border: 1px solid #fae4e1;
+    padding: 20px !important;
+    float: none !important;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#cmrd-payment-buttons a,
+#cmrd-payment-buttons a img {
+    width: 100%;
+    margin: 10px 0;
 }
