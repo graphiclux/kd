@@ -23,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** @global WC_Checkout $checkout */
 
 ?>
-<div class="woocommerce-billing-fields">
+
+
+
+<div id="wc-billing-fields" class="woocommerce-billing-fields">
 	<?php if ( wc_ship_to_billing_address_only() && WC()->cart->needs_shipping() ) : ?>
 
 <!-- 		<h3><?php _e( 'Billing &amp; Shipping', 'woocommerce' ); ?></h3> -->
@@ -39,19 +42,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="billing_slide">
 
 		<div class="woocommerce-billing-fields__field-wrapper">
-			<?php foreach ( $checkout->get_checkout_fields( 'billing' ) as $key => $field ) : ?>				
+			<?php foreach ( $checkout->get_checkout_fields( 'billing' ) as $key => $field ) : ?>
 				<? if (($field['placeholder'] == "Email") || ($field['placeholder'] == "First Name")) { ?>
 					<?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
 				<? } ?>
-				
+
 			<?php endforeach; ?>
 		</div>
-		
-		<a href="#" class="continue" id="billing_continue">Continue</a>
-	
+
+
+
 		<?php do_action( 'woocommerce_after_checkout_billing_form', $checkout ); ?>
-		
+
 	</div>
+
+	<span class="cmrd-warning">ENTER THE REQUIRED INFORMATION</span>
+
+	<a href="#" class="continue" id="billing_continue">Continue</a>
+
+
 </div>
 
 <?php if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) : ?>
