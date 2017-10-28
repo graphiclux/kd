@@ -33,6 +33,10 @@ do_action( 'woocommerce_before_checkout_form', $checkout ); ?>
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 		<div class="checkout_left">
 			<div class="col2-set" id="customer_details">
+				<div id="cmrd-payment-buttons">
+					<h2>Choose Payment Method</h2>
+					<a id="cmrd-payment-methods"><img id="cmrd-payment-logos" src="/wp-content/themes/KDJ/woocommerce/checkout/creditcard-checkout.jpg"></a>
+				</div>
 				<div class="col-1">
 					<?php do_action( 'woocommerce_checkout_billing' ); ?>
 				</div>
