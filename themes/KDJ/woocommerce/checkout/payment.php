@@ -31,7 +31,7 @@ if ( ! is_ajax() ) {
 	<h3 id="payment_header"><?= _e( '3. Payment', 'woocommerce' )?></h3>
 	<a href="#" id="payment_edit" class="checkout_edit">EDIT</a>
 	<?
-	$cardLogoPath = '/wp-content/themes/KDJ/woocommerce/checkout/payment_logos.png';
+	$cardLogoPath = '/wp-content/themes/KDJ/woocommerce/checkout/creditcard-checkout.jpg';
 	echo "<img src='$cardLogoPath' class='payment_logos' />";
 	?>
 	<div style="clear:both"></div>
