@@ -68,6 +68,21 @@ input[type=number] {
 	width: 50%;
 }
 
+div#cmrd-payment-buttons {
+    background: #fff;
+    border: 1px solid #fae4e1;
+    padding: 20px !important;
+    float: none !important;
+    display: block;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+#cmrd-payment-buttons a, #cmrd-payment-buttons a img {
+    width: 100%;
+    margin: 0px 0px 10px 0px;
+}
+
 input.button.remove-coupon {
     background: none;
     color: #000 !important;
