@@ -1392,3 +1392,11 @@ body.woocommerce-cart .cmrd-coupon-wrap p {
     width: 100%;
     margin: 10px 0;
 }
+
+.checkout_btn {
+    width: 50% !important;
+}
+
+.checkout_and_cart_featured_image br {
+    display: none;
+}
