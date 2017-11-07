@@ -1672,14 +1672,14 @@ li.check_prod_name_cell {
 	width:100%;
 	top:50%;
 	font-size:204px;
-	line-height:291px;
+	line-height: inherit;
 	color:#FFFFFF;
 	vertical-align:middle;
 	margin:-280px 0 0 0;
 }
 
 .look_book_big_img_title h2 i {
-	display:inline-block;
+	display: block;
 	font-size:30px;
 	text-transform:uppercase;
 	color:#000000;
@@ -1706,11 +1706,13 @@ li.check_prod_name_cell {
 	font-size:32px;
 	line-height:39px;
 	margin:0 0 5px 0;
+	text-align: center;
 }
 
 .look_book_title_text p {
 	font-size:14px;
 	line-height:20px;
+	text-align: center;
 }
 
 .look_book_title_text .the_button {
@@ -1731,7 +1733,7 @@ li.check_prod_name_cell {
 
 .look_book_slider_1_box {
 	position:relative;
-	margin:-325px auto 90px auto;
+	/*margin:-325px auto 90px auto;*/
 	z-index:5;
 	overflow: hidden;
 }
@@ -1788,7 +1790,8 @@ li.check_prod_name_cell {
 .lbs_1_text_box {
 	width:420px;
 	float:right;
-	margin:478px 76px 0 0;
+    margin: 350px 76px 0 0;
+    text-align: center;
 }
 
 .lbs_1_text_box h4 {
@@ -1800,6 +1803,10 @@ li.check_prod_name_cell {
 	font-size:14px;
 	line-height:20px;
 	margin:0;
+}
+
+.container.repeater {
+    margin-top: 150px;
 }
 
 .look_book_slider_1_box .bx-controls-direction a {

@@ -63,65 +63,51 @@ get_header();
             ?>
         </div><!--/look_book_big_img_title-->
 
-        <div class="container">
-            <?php
-            $slider = get_field('slider');
-            $slider_title = get_field('slider_title');
-            $slider_text = get_field('slider_text');
-            if ($slider_title || $slider_text || $slider) {
-                ?>
-
-                <div class="look_book_slider_1_box">
-                    <?php
-                    if ($slider) {
-                        ?>
-                        <div class="slider-holder">
-                            <ul class="look_book_slider_1">
-                                <?php foreach ($slider as $slide) { ?>
-                                    <li>
-                                        <div class="lbs_1_image_box">
-                                            <img src="<?php echo $slide["sizes"]["look-book-slider"] ?>" alt="">
-                                        </div>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    <?php
-                    }
-
-                    if ($slider_title || $slider_text) {
-                        ?>
-                        <div class="lbs_1_text_box">
-                            <?php
-                            if ($slider_title) {
-                                echo '<h4>' . $slider_title . '</h4>';
-                            }
-                            if ($slider_text) {
-                                echo wpautop($slider_text);
-                            }
-                            ?>
-                        </div>
-                    <?php } ?>
-                </div>
+        <div class="container repeater">
+	        <?php if( have_rows('slider_repeater') ): ?>
+		        <?php while( have_rows('slider_repeater') ): the_row(); 
+	
+				// vars
+				$slider = get_sub_field('slider');
+				$title = get_sub_field('slider_title');
+				$text = get_sub_field('slider_text');
+		
+				?>
+			<div class="look_book_slider_1_box">
                 <?php
-            }
-
-            $gallery = get_field('gallery');
-            if ($gallery) {
-                ?>
-
-                <div class="look_book_slider_2_box">
-                    <ul class="look_book_slider_2">
-                        <?php foreach ($gallery as $item) { ?>
-                            <li>
-                                <img src="<?php echo $item["sizes"]["look-book-gallery"]; ?>" alt="">
-                            </li>
-                        <?php } ?>
+                    if ($slider) {
+                ?>	
+	        	<div class="slider-holder">
+					<ul class="look_book_slider_1">
+						<?php foreach ($slider as $slide) { ?>
+                        	<li>
+                            	<div class="lbs_1_image_box">
+                                	<img src="<?php echo $slide["sizes"]["look-book-slider"] ?>" alt="">
+                               	</div>
+							</li>
+                          <?php } ?>
                     </ul>
                 </div>
-                <?php
-            }
-            ?>
+                <?php }
+					if ($title || $text) {
+                ?>
+                    <div class="lbs_1_text_box">
+	                    <?php
+	                    if ($title) {
+	                        echo '<h4>' . $title . '</h4>';
+	                    }
+	                    if ($text) {
+	                        echo wpautop($text);
+	                    }
+	                    ?>
+                    </div>
+                    <?php } ?>
+                </div>
+				<?php endwhile; ?>
+	       <?php endif; ?> 
+	        
+	        
+            
 
         </div><!--/container-->
         <?php
