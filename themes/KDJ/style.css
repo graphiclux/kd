@@ -1632,6 +1632,10 @@ li.check_prod_name_cell {
 	padding:0 6px 0 6px;
 }
 
+.centered.lookbook {
+	margin-top: 100px;
+}
+
 .look_book_big_img_title {
 	display:block;
 	position:relative;
@@ -4575,6 +4579,20 @@ body .wpcf7-form span.wpcf7-not-valid-tip{
 		
 	div.MagicToolboxMainContainer {
     	max-width: 100% !important;
+	}
+}
+
+@media screen and (max-width: 780px) {
+
+	.look_book_slider_1_box.not-mobile {
+	    display: none;
+	}
+}
+
+@media screen and (min-width: 779px) {
+
+	.look_book_slider_1_box.mobile {
+	    display: none;
 	}
 }
 @media screen and (max-width: 719px) {

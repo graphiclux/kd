@@ -73,7 +73,7 @@ get_header();
 				$text = get_sub_field('slider_text');
 		
 				?>
-			<div class="look_book_slider_1_box">
+			<div class="look_book_slider_1_box not-mobile">
                 <?php
                     if ($slider) {
                 ?>	
@@ -103,12 +103,46 @@ get_header();
                     </div>
                     <?php } ?>
                 </div>
+                <div class="look_book_slider_1_box mobile">
+                <?php
+                    if ($slider) {
+                ?>	
+	        	
+                <?php }
+					if ($title || $text) {
+                ?>
+                    <div class="lbs_1_text_box">
+	                    <?php
+	                    if ($title) {
+	                        echo '<h4>' . $title . '</h4>';
+	                    }
+	                    if ($text) {
+	                        echo wpautop($text);
+	                    }
+	                    ?>
+                    </div>
+                    <div class="slider-holder">
+					<ul class="look_book_slider_1">
+						<?php foreach ($slider as $slide) { ?>
+                        	<li>
+                            	<div class="lbs_1_image_box">
+                                	<img src="<?php echo $slide["sizes"]["look-book-slider"] ?>" alt="">
+                               	</div>
+							</li>
+                          <?php } ?>
+                    </ul>
+                </div>
+                    <?php } ?>
+                    
+                </div>
 				<?php endwhile; ?>
 	       <?php endif; ?> 
 	        
-	        
-            
-
+	      <div class="centered lookbook">
+		      <div class="entry"> 
+          <?php the_field('custom_text'); ?>  
+		      </div>
+	      </div>
         </div><!--/container-->
         <?php
     endwhile;
