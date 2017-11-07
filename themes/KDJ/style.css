@@ -1695,15 +1695,14 @@ li.check_prod_name_cell {
 }
 
 .look_book_title_text {
-	position:absolute;
-	right:86px;
-	top:50%;
-	border:1px solid #100b09;
-	background:rgba(255,255,255, 0.8);
-	width:497px;
-	z-index:10;
-	padding:43px 25px 42px 49px;
-	margin:15px 0 0 0;
+    position: relative;
+    border: 1px solid #100b09;
+    background: rgba(255,255,255, 0.8);
+    width: 497px;
+    z-index: 9999999;
+    padding: 43px 25px 42px 49px;
+    top: -472px;
+    margin: 0 auto;
 }
 
 .look_book_title_text h3 {
@@ -1740,6 +1739,7 @@ li.check_prod_name_cell {
 	/*margin:-325px auto 90px auto;*/
 	z-index:5;
 	overflow: hidden;
+    margin-top: 150px;
 }
 .look_book_slider_1_box .slider-holder {
 	float: left;
@@ -4587,6 +4587,10 @@ body .wpcf7-form span.wpcf7-not-valid-tip{
 	.look_book_slider_1_box.not-mobile {
 	    display: none;
 	}
+	
+	.look_book_slider_1_box.mobile .lbs_1_text_box {
+		margin-bottom: 50px;
+	}
 }
 
 @media screen and (min-width: 779px) {
@@ -4596,6 +4600,12 @@ body .wpcf7-form span.wpcf7-not-valid-tip{
 	}
 }
 @media screen and (max-width: 719px) {
+	
+	.centered.lookbook {
+		width: 320px;
+	    margin: 0 auto 30px auto;
+	    padding: 0 27px 0 19px;
+	}
 	
 	.checkout_tbl_row > li.check_prod_photo_cell {
 		width: 35%;
