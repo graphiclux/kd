@@ -218,13 +218,17 @@ $(document).ready(function() {
         }
 
 
+        // $(".youll_love_these_list").on("swipe",function(swipe){
+  //           product_swipe(swipe, '.youll_love_these', youllLoveTheseCount);
+  //       });
+
         $(".youll_love_these_list").on("swipe",function(swipe){
             product_swipe(swipe, '.youll_love_these', youllLoveTheseCount);
         });
 
-
-
         $(".rc_wc_rvp_product_list_widget").on("swipe",function(swipe){
+            alert("swiping recently viewed. here is the swip event:");
+            console.dir(swipe);
             product_swipe(swipe, '.recently_viewed', recentlyViewedCount);
         });
 
@@ -390,9 +394,9 @@ $(document).ready(function() {
         hideShipping();
         showPayment();
 
-        $('html,body').animate({
-            scrollTop: $("#payment").offset().top},
-          'slow');
+        // $('html,body').animate({
+        //     scrollTop: $("#payment").offset().top},
+        //   'slow');
 
         // ADD EDIT BUTTON
         $('#shipping_edit').fadeIn();
@@ -440,40 +444,41 @@ $(document).ready(function() {
 
     });
 
+    /**
+    * Woocommerce Place Order Button
+    */
     $('#place_order').unbind().click(function(e) {
 
         e.preventDefault();
 
+        $('#whiteout').css("background", "#ffffff").fadeIn();
 
+        // $.post('?wc-ajax=checkout', {}).done(function(data) {
+        //  if (typeof data.messages != 'undefined') {
+        //      var message = data.messages;
+        //      $(message).insertBefore('#whiteout');
+                // }
+        //   console.log(data);
+        //
+        //   $('#whiteout').delay(2000).fadeOut();
+        //
+        //   $('html,body').animate({
+                //  scrollTop: $("#customer_details").offset().top - 50
+                // },'slow');
+        //
+        // });
 
-    $('#whiteout').fadeIn();
+        $('.checkout').submit();
 
-    // $.post('?wc-ajax=checkout', {}).done(function(data) {
-    //  if (typeof data.messages != 'undefined') {
-    //      var message = data.messages;
-    //      $(message).insertBefore('#whiteout');
-            // }
-    //   console.log(data);
-    //
-    //   $('#whiteout').delay(2000).fadeOut();
-    //
-    //   $('html,body').animate({
-            //  scrollTop: $("#customer_details").offset().top - 50
-            // },'slow');
-    //
-    // });
+        showBilling();
+        showShipping();
+        showPayment();
 
-    $('.checkout').submit();
+        $('html,body').animate({
+          scrollTop: $("#customer_details").offset().top - 50
+        },'slow');
 
-    showBilling();
-    showShipping();
-    showPayment();
-
-    $('html,body').animate({
-      scrollTop: $("#customer_details").offset().top - 50
-    },'slow');
-
-    $('#whiteout').delay(2000).fadeOut();
+        $('#whiteout').delay(2000).fadeOut();
 
     });
 
@@ -613,6 +618,10 @@ function showReviewAndPurchase() {
 }
 
 function product_swipe(swipe, elementClass, count) {
+    console.log("In product_swipe");
+    console.dir(swipe);
+    console.dir(elementClass);
+    console.log("count is  " + count);
 
     var directionValue = swipe.swipestart.coords[0] - swipe.swipestop.coords[0];
 
@@ -683,9 +692,83 @@ function product_swipe(swipe, elementClass, count) {
             $(elementClass+' #slide-2').hide();
             $(elementClass+' #slide-4').fadeIn();
         }
+
     }
+
 }
 
+// function product_swipe(swipe, elementClass, count) {
+
+//  var directionValue = swipe.swipestart.coords[0] - swipe.swipestop.coords[0];
+
+//  if (directionValue > 0) {
+//      var direction = 'left';
+//  } else {
+//      var direction = 'right';
+//  }
+
+//  var slideNumber = 0;
+
+//  $(elementClass+' ul').children().each(function(i) {
+
+//      if (!$(this).is(":hidden")) {
+//          slideNumber = $(this).attr('id').split('slide-')[1];
+//      }
+
+//  });
+
+//  if (slideNumber == 0) {
+
+//      if (direction == 'left') {
+//          if (count > 2) {
+//              $(elementClass+' #bullet-2').css({'color': '#111'});
+//              $(elementClass+' #bullet-1').css({'color': '#f37f93'});
+//              $(elementClass+' #bullet-3').css({'color': '#f37f93'});
+//              $(elementClass+' #slide-0').hide();
+//              $(elementClass+' #slide-2').fadeIn();
+//              $(elementClass+' #slide-4').hide();
+//          }
+
+//      } else {
+//          return false;
+//      }
+
+//  } else if (slideNumber == 2) {
+
+//      if (direction == 'left') {
+//          if (count > 4) {
+//              $(elementClass+' #bullet-3').css({'color': '#111'});
+//              $(elementClass+' #bullet-2').css({'color': '#f37f93'});
+//              $(elementClass+' #bullet-1').css({'color': '#f37f93'});
+//              $(elementClass+' #slide-0').hide();
+//              $(elementClass+' #slide-2').hide();
+//              $(elementClass+' #slide-4').fadeIn();
+//          }
+//      } else {
+//          $(elementClass+' #bullet-1').css({'color': '#111'});
+//          $(elementClass+' #bullet-2').css({'color': '#f37f93'});
+//          $(elementClass+' #bullet-3').css({'color': '#f37f93'});
+//          $(elementClass+' #slide-0').fadeIn();
+//          $(elementClass+' #slide-2').hide();
+//          $(elementClass+' #slide-4').hide()
+//      }
+
+//  } else if (slideNumber == 4) {
+
+//      if (direction == 'left') {
+//          return false;
+//      } else {
+//          $(elementClass+' #bullet-3').css({'color': '#111'});
+//          $(elementClass+' #bullet-2').css({'color': '#f37f93'});
+//          $(elementClass+' #bullet-1').css({'color': '#f37f93'});
+//          $(elementClass+' #slide-0').hide();
+//          $(elementClass+' #slide-2').hide();
+//          $(elementClass+' #slide-4').fadeIn();
+//      }
+
+//  }
+
+// }
 
 /* cmRD Scripts */
 $(document).ready( function() {
@@ -703,11 +786,8 @@ function callScripts() {
             if ( $(triggerScroll).length ) {
                 clearInterval(checkerScroll);
 
-                var target = ".MagicToolboxSelectorsContainer div[id^=Magic]";
+                var target = ".mcs-items-container";
 
-                if ( !$(target).length ) {
-                    target = ".mcs-items-container";
-                }
                 setAutoScroll( triggerScroll, target );
 
                 /* Function not animating on first trigger
