@@ -474,9 +474,9 @@ $(document).ready(function() {
         showShipping();
         showPayment();
 
-        $('html,body').animate({
-          scrollTop: $("#customer_details").offset().top - 50
-        },'slow');
+//         $('html,body').animate({
+//           scrollTop: $("#customer_details").offset().top - 50
+//         },'slow');
 
         $('#whiteout').delay(5000).fadeOut();
 
