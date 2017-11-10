@@ -818,6 +818,10 @@ function callScripts() {
         var checkerShip = setInterval( function() {
             if ( $(triggerShip).length ) {
                 clearInterval(checkerShip);
+              
+                  $("#shipping_continue").click(function(e) {
+                      e.preventDefault();
+                  });
 
                 window.countrySelect = $("#shipping_country");
                 window.optSelect = $("select[id^='shipping_method']");
